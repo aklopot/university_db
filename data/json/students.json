@@ -1,0 +1,30 @@
+[
+    {
+      "first_name": "Jan",
+      "last_name": "Kowalski",
+      "address": {
+        "street": "ul. Długa 10",
+        "apartment": "5A",
+        "city": "Warszawa",
+        "zip_code": "00-001",
+        "country": "Polska"
+      },
+      "index_number": "12345",
+      "pesel": "85010112345",
+      "gender": "MALE"
+    },
+    {
+      "first_name": "Anna",
+      "last_name": "Nowak",
+      "address": {
+        "street": "ul. Krótka 2",
+        "city": "Kraków",
+        "zip_code": "30-002",
+        "country": "Polska"
+      },
+      "index_number": "67890",
+      "pesel": "92020254321",
+      "gender": "FEMALE"
+    }
+  ]
+  

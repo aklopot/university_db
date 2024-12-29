@@ -1,0 +1,7 @@
+{
+    "data_source": "sqlite",
+    "json_student_path": "data/json/students.json",
+    "json_professor_path": "data/json/professors.json",
+    "sqlite_url": "sqlite:///data/sqlite/university_db.db",
+    "postgres_url": "postgresql://user:password@localhost:5432/university_db"
+}  

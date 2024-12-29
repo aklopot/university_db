@@ -1,0 +1,5 @@
+
+--diagram klas, lub diagram stuktur danych
+--zrobic klase do obslugi dat (czy rok jest przestepny), np. chrono z c++
+
+puml - wazne opis

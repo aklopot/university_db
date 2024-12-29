@@ -1,0 +1,3 @@
+# GUI
+kivy                # Do aplikacji okienkowej opartej na Kivy
+sqlmodel            # Do obsługi bazy danych

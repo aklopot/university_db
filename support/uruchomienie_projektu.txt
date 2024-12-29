@@ -1,0 +1,20 @@
+Uruchomienie w Visual Studio Code:
+
+1) Dodanie wirtualnego środowiska .venv_universitydb
+python -m venv .venv_universitydb
+
+W razie potrzeby aktywacja środowiska
+Linux:
+source .venv_universitydb/Scripts/activate
+Windows:
+Dla Git bash:
+source .venv_universitydb/Scripts/activate
+Dla cmd/powershell:
+.\.venv_universitydb\Scripts\activate
+
+2) Instalacja wymaganych zaleźności
+pip install -r requirements.txt
+
+3) Uruchomienie
+    a) Klient GUI Kivy:
+    python clients/gui_kivy/main.py
