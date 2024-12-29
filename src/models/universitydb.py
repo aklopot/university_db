@@ -5,7 +5,7 @@ from enum import Enum
 from sqlalchemy import Enum as SAEnum
 
 class Gender(SQLModel, table=True):
-    __tablename__ = "genders"
+    __tablename__ = "gender"
     gender_id: Optional[int] = Field(default=None, primary_key=True)
     name: str = Field(sa_column=Column(String, unique=True, index=True))
 
@@ -14,7 +14,7 @@ class Gender(SQLModel, table=True):
 
 
 class Address(SQLModel, table=True):
-    __tablename__ = "addresses"
+    __tablename__ = "address"
     address_id: Optional[int] = Field(default=None, primary_key=True)
     street: str
     building_number: str
@@ -28,14 +28,14 @@ class Address(SQLModel, table=True):
 
 
 class Student(SQLModel, table=True):
-    __tablename__ = "students"
+    __tablename__ = "student"
     student_id: Optional[int] = Field(default=None, primary_key=True)
     first_name: str
     last_name: str
-    address_id: Optional[int] = Field(default=None, foreign_key="addresses.address_id")
+    address_id: Optional[int] = Field(default=None, foreign_key="address.address_id")
     index_number: str
     pesel: str
-    gender_id: Optional[int] = Field(default=None, foreign_key="genders.gender_id")
+    gender_id: Optional[int] = Field(default=None, foreign_key="gender.gender_id")
     
     address: Optional[Address] = Relationship(back_populates="students")
     gender: Optional[Gender] = Relationship(back_populates="students")
@@ -48,13 +48,13 @@ class AcademicPosition(str, Enum):
     LECTURER = "Lecturer"
 
 class Professor(SQLModel, table=True):
-    __tablename__ = "professors"
+    __tablename__ = "professor"
     professor_id: Optional[int] = Field(default=None, primary_key=True)
     first_name: str
     last_name: str
-    address_id: Optional[int] = Field(default=None, foreign_key="addresses.address_id")
+    address_id: Optional[int] = Field(default=None, foreign_key="address.address_id")
     pesel: str
-    gender_id: Optional[int] = Field(default=None, foreign_key="genders.gender_id")
+    gender_id: Optional[int] = Field(default=None, foreign_key="gender.gender_id")
     position: AcademicPosition = Field(sa_column=Column(SAEnum(AcademicPosition)))
     
     address: Optional[Address] = Relationship(back_populates="professors")

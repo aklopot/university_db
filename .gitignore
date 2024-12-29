@@ -1,3 +1,5 @@
 __pycache__
 .venv_universitydb
 .cursorrules
+university_db.db-shm
+university_db.db-wal
