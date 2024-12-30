@@ -12,13 +12,9 @@ class ProfessorForm(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
-        # Wczytaj konfigurację
-        with open("config/config.json") as config_file:
-            config = json.load(config_file)
-        
-        self.service = ServiceFactory(config).get_professor_service()
-        self.gender_service = ServiceFactory(config).get_gender_service()
-        self.address_service = ServiceFactory(config).get_address_service()
+        self.service = ServiceFactory().get_professor_service()
+        self.gender_service = ServiceFactory().get_gender_service()
+        self.address_service = ServiceFactory().get_address_service()
         
         self.layout = BoxLayout(orientation='vertical')
         

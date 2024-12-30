@@ -3,7 +3,7 @@ from src.repositories.repository_factory import RepositoryFactory
 from typing import List, Optional
 
 class AddressService:
-    def __init__(self, config):
+    def __init__(self):
         self.repository = RepositoryFactory().get_address_repository()
     
     def add_address(self, address: Address):

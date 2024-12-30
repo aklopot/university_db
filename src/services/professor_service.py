@@ -6,10 +6,10 @@ from src.services.address_service import AddressService
 from typing import List
 
 class ProfessorService:
-    def __init__(self, config):
+    def __init__(self):
         self.repository = RepositoryFactory().get_professor_repository()
-        self.gender_service = GenderService(config)
-        self.address_service = AddressService(config)
+        self.gender_service = GenderService()
+        self.address_service = AddressService()
         
     def add_professor(self, professor: Professor):
         # Upewnij się, że płeć istnieje

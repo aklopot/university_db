@@ -4,7 +4,7 @@ from src.repositories.repository_factory import RepositoryFactory
 from typing import List, Optional
 
 class GenderService:
-    def __init__(self, config):
+    def __init__(self):
         self.repository = RepositoryFactory().get_gender_repository()
 
     def add_gender(self, name: str):

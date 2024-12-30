@@ -6,11 +6,11 @@ from src.services.gender_service import GenderService
 from src.services.address_service import AddressService
 
 class StudentService:
-    def __init__(self, config):
-        # Tworzymy fabrykę repozytoriów na podstawie konfiguracji
+    def __init__(self):
+        # Tworzymy fabrykę repozytoriów bez przekazywania konfiguracji
         self.repository = RepositoryFactory().get_student_repository()
-        self.gender_service = GenderService(config)
-        self.address_service = AddressService(config)
+        self.gender_service = GenderService()
+        self.address_service = AddressService()
 
     def add_student(self, student: Student):
         # Upewnij się, że płeć istnieje

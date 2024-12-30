@@ -11,11 +11,7 @@ class AddressSelectionScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
-        # Wczytaj konfigurację
-        with open("config/config.json") as config_file:
-            config = json.load(config_file)
-        
-        self.address_service = ServiceFactory(config).get_address_service()
+        self.address_service = ServiceFactory().get_address_service()
         
         # Główny układ
         self.layout = BoxLayout(orientation='vertical')

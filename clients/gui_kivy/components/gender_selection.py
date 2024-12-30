@@ -11,11 +11,7 @@ class GenderSelectionScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
-        # Wczytaj konfigurację
-        with open("config/config.json") as config_file:
-            config = json.load(config_file)
-        
-        self.gender_service = ServiceFactory(config).get_gender_service()
+        self.gender_service = ServiceFactory().get_gender_service()
         
         # Główny układ
         self.layout = BoxLayout(orientation='vertical')

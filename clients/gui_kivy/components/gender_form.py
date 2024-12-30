@@ -9,11 +9,8 @@ class GenderForm(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        # Wczytaj konfigurację
-        with open("config/config.json") as config_file:
-            config = json.load(config_file)
+        self.gender_service = ServiceFactory().get_gender_service()
 
-        self.service = ServiceFactory(config).get_gender_service()
         self.gender = None  # Przechowuje aktualnie edytowaną płeć
 
         # Główny układ
@@ -56,10 +53,10 @@ class GenderForm(Screen):
             if self.gender:
                 # Aktualizacja istniejącej płci
                 self.gender.name = gender_name
-                self.service.update_gender(self.gender)
+                self.gender_service.update_gender(self.gender)
             else:
                 # Dodanie nowej płci
-                self.service.add_gender(gender_name)
+                self.gender_service.add_gender(gender_name)
             # Powrót do poprzedniego ekranu
             self.manager.current = self.previous_screen
             # Odśwież listę płci na poprzednim ekranie

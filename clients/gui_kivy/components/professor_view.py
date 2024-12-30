@@ -11,10 +11,7 @@ class ProfessorView(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
-        with open("config/config.json") as config_file:
-            config = json.load(config_file)
-        
-        self.service = ServiceFactory(config).get_professor_service()
+        self.service = ServiceFactory().get_professor_service()
         
         # Główny układ
         self.layout = BoxLayout(orientation='vertical')

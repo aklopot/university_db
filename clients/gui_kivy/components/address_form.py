@@ -2,6 +2,7 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+from kivy.uix.label import Label
 from src.services.service_factory import ServiceFactory
 from src.models.universitydb import Address
 import json
@@ -10,11 +11,7 @@ class AddressForm(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
-        # Wczytaj konfigurację
-        with open("config/config.json") as config_file:
-            config = json.load(config_file)
-        
-        self.address_service = ServiceFactory(config).get_address_service()
+        self.address_service = ServiceFactory().get_address_service()
         
         self.layout = BoxLayout(orientation='vertical')
         

@@ -5,17 +5,14 @@ from src.services.gender_service import GenderService
 from src.services.address_service import AddressService
 
 class ServiceFactory:
-    def __init__(self, config):
-        self.config = config
-
     def get_student_service(self) -> StudentService:
-        return StudentService(self.config)
+        return StudentService()
 
     def get_professor_service(self) -> ProfessorService:
-        return ProfessorService(self.config)
+        return ProfessorService()
     
     def get_gender_service(self) -> GenderService:
-        return GenderService(self.config)
+        return GenderService()
 
     def get_address_service(self) -> AddressService:
-        return AddressService(self.config)
+        return AddressService()
