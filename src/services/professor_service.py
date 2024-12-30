@@ -7,7 +7,7 @@ from typing import List
 
 class ProfessorService:
     def __init__(self, config):
-        self.repository = RepositoryFactory(config).get_professor_repository()
+        self.repository = RepositoryFactory().get_professor_repository()
         self.gender_service = GenderService(config)
         self.address_service = AddressService(config)
         

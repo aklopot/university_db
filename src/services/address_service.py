@@ -4,7 +4,7 @@ from typing import List, Optional
 
 class AddressService:
     def __init__(self, config):
-        self.repository = RepositoryFactory(config).get_address_repository()
+        self.repository = RepositoryFactory().get_address_repository()
     
     def add_address(self, address: Address):
         self.repository.add_address(address)

@@ -1,0 +1,12 @@
+    [general]
+    data_source = "sqlite" # Opcje: json, sqlite, postgres
+
+    [data_source.json]
+    json_student_path = "data/json/students.json"
+    json_professor_path = "data/json/professors.json"
+
+    [data_source.sqlite]
+    sqlite_url = "sqlite:///data/sqlite/university_db.db"
+
+    [data_source.postgres]
+    postgres_url = "postgresql://user:password@localhost:5432/university_db"

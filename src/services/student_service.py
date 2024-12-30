@@ -8,7 +8,7 @@ from src.services.address_service import AddressService
 class StudentService:
     def __init__(self, config):
         # Tworzymy fabrykę repozytoriów na podstawie konfiguracji
-        self.repository = RepositoryFactory(config).get_student_repository()
+        self.repository = RepositoryFactory().get_student_repository()
         self.gender_service = GenderService(config)
         self.address_service = AddressService(config)
 

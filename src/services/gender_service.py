@@ -5,7 +5,7 @@ from typing import List, Optional
 
 class GenderService:
     def __init__(self, config):
-        self.repository = RepositoryFactory(config).get_gender_repository()
+        self.repository = RepositoryFactory().get_gender_repository()
 
     def add_gender(self, name: str):
         gender = Gender(name=name)
