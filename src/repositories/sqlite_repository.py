@@ -40,7 +40,7 @@ class SQLiteStudentRepository(BaseStudentRepository):
 
     def update_student(self, student: Student) -> None:
         with Session(self.engine) as session:
-            existing_student = session.get(Student, student.address_id)
+            existing_student = session.get(Student, student.student_id)
             if existing_student:
                 existing_student.first_name = student.first_name
                 existing_student.last_name = student.last_name
