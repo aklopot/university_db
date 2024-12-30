@@ -1,42 +1,31 @@
-# pesel.py: Zawiera definicję klasy PESEL, która reprezentuje numer PESEL. Klasa ta zawiera metody do walidacji formatu i sumy kontrolnej numeru PESEL.
+# pesel.py: Zawiera definicję klasy PESEL, która reprezentuje numer PESEL.
 import re
+from dataclasses import dataclass
+from src.services.exceptions.exceptions import ValidationError
 
+@dataclass(frozen=True)
 class PESEL:
-    PESEL_REGEX = r"^\d{11}$"
+    """Value object reprezentujący numer PESEL."""
+    value: str
 
-    def __init__(self, pesel: str):
-        if not self.validate_format(pesel):
-            raise ValueError("Invalid PESEL format. PESEL must be exactly 11 digits.")
-        if not self.validate_checksum(pesel):
-            raise ValueError("Invalid PESEL checksum.")
-        self.pesel = pesel
-
-    @staticmethod
-    def validate_format(pesel: str) -> bool:
-        """
-        Validates that the PESEL consists of exactly 11 digits.
-        """
-        return bool(re.match(PESEL.PESEL_REGEX, pesel))
+    def __post_init__(self):
+        """Walidacja przy tworzeniu obiektu."""
+        if not self._validate_format(self.value):
+            raise ValidationError("Nieprawidłowy format numeru PESEL. PESEL musi składać się z dokładnie 11 cyfr.")
+        if not self._validate_checksum(self.value):
+            raise ValidationError("Nieprawidłowa suma kontrolna numeru PESEL.")
 
     @staticmethod
-    def validate_checksum(pesel: str) -> bool:
-        """
-        Validates the PESEL checksum using the weights and control digit.
-        The weights for the first 10 digits are [9, 7, 3, 1, 9, 7, 3, 1, 9, 7].
-        """
+    def _validate_format(pesel: str) -> bool:
+        """Sprawdza, czy PESEL składa się z dokładnie 11 cyfr."""
+        return bool(re.match(r"^\d{11}$", pesel))
+
+    @staticmethod
+    def _validate_checksum(pesel: str) -> bool:
+        """Waliduje sumę kontrolną PESEL."""
         weights = [9, 7, 3, 1, 9, 7, 3, 1, 9, 7]
         checksum = sum(int(pesel[i]) * weights[i] for i in range(10)) % 10
         return checksum == int(pesel[10])
 
-    def __str__(self):
-        return self.pesel
-
-    def __eq__(self, other):
-        if isinstance(other, PESEL):
-            return self.pesel == other.pesel
-        if isinstance(other, str):
-            return self.pesel == other
-        return False
-
-    def __hash__(self):
-        return hash(self.pesel)
+    def __str__(self) -> str:
+        return self.value
