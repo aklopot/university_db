@@ -28,7 +28,8 @@ class SQLiteStudentRepository(BaseStudentRepository):
         with Session(self.engine) as session:
             statement = select(Student).options(
                 joinedload(Student.gender),
-                joinedload(Student.address)
+                joinedload(Student.address),
+                joinedload(Student.field_of_study)
             )
             return session.exec(statement).all()
 
@@ -50,6 +51,7 @@ class SQLiteStudentRepository(BaseStudentRepository):
                 existing_student.index_number = student.index_number
                 existing_student.pesel = student.pesel
                 existing_student.gender_id = student.gender_id
+                existing_student.field_of_study_id = student.field_of_study_id
                 session.commit()
 
 class SQLiteAcademicStaffRepository(BaseAcademicStaffRepository):
