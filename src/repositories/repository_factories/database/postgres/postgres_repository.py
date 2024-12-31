@@ -1,4 +1,5 @@
-# postgres_repository.py: Zawiera klasy implementujące interfejsy zdefiniowane w folderze repozytoriów. Klasy te korzystają z bazy danych PostgreSQL do przechowywania danych.
+# postgres_repository.py: Zawiera klasy implementujące interfejsy zdefiniowane w folderze repozytoriów.
+# Klasy te korzystają z bazy danych PostgreSQL do przechowywania danych.
 from typing import List
 from sqlmodel import SQLModel, Session, select, create_engine
 from src.models.universitydb import Student, AcademicStaff

@@ -1,4 +1,5 @@
-# sqlite_repository.py: Jest to moduł implementujący interfejsy BaseStudentRepository i BaseAcademicStaffRepository. Używa klas SQLModel i Session z pakietu sqlmodel do interakcji z bazą danych SQLite. Dostarcza metod dodawania, pobierania, usuwania i aktualizowania rekordów studentów i pracowników akademickich w bazie danych.
+# sqlite_repository.py: Jest to moduł implementujący interfejsy takie jak: BaseStudentRepository, BaseAcademicStaffRepository, itp..
+# Używa klas SQLModel i Session z pakietu sqlmodel do interakcji z bazą danych SQLite.
 from typing import List, Optional
 from sqlmodel import SQLModel, Session, select, create_engine
 from src.models.universitydb import Address, Gender, Student, AcademicStaff

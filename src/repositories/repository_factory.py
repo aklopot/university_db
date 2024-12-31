@@ -1,4 +1,5 @@
-# repository_factory.py: Jest to fabryka, która tworzy odpowiednie repozytoria w zależności od konfiguracji. Fabryka ta jest używana w aplikacji do tworzenia repozytoriów, które są używane do interakcji z magazynem danych.
+# repository_factory.py: Jest to fabryka, która tworzy odpowiednie repozytoria w zależności od konfiguracji
+# Fabryka ta jest używana w aplikacji do tworzenia repozytoriów, które są używane do interakcji z danym magazynem danych.
 from src.repositories.repository_factories.repository_factory_registry import RepositoryFactoryRegistry
 from src.repositories.repository_factories.repository_factory_interface import RepositoryFactoryInterface
 from src.repositories.base_repositories.base_student_repository import BaseStudentRepository
