@@ -8,7 +8,7 @@ T = TypeVar('T')
 
 class BasePersonValidator(BaseValidator[T], Generic[T]):
     """
-    Bazowy walidator dla osób (studentów i profesorów).
+    Bazowy walidator dla osób (np. studentów, pracowników akademickich).
     """
     def validate(self, person: T) -> None:
         """

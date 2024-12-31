@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from src.repositories.base_repositories.base_student_repository import BaseStudentRepository
-from src.repositories.base_repositories.base_professor_repository import BaseProfessorRepository
+from src.repositories.base_repositories.base_academic_staff_repository import BaseAcademicStaffRepository
 from src.repositories.base_repositories.base_gender_repository import BaseGenderRepository
 from src.repositories.base_repositories.base_address_repository import BaseAddressRepository
 
@@ -12,7 +12,7 @@ class RepositoryFactoryInterface(ABC):
         pass
         
     @abstractmethod
-    def create_professor_repository(self) -> BaseProfessorRepository:
+    def create_academic_staff_repository(self) -> BaseAcademicStaffRepository:
         pass
         
     @abstractmethod

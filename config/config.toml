@@ -3,7 +3,7 @@
 
     [data_source.json]
     json_student_path = "data/json/students.json"
-    json_professor_path = "data/json/professors.json"
+    json_academic_staff_path = "data/json/academic_staff.json"
 
     [data_source.sqlite]
     sqlite_url = "sqlite:///data/sqlite/university_db.db"

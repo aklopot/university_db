@@ -7,7 +7,7 @@ T = TypeVar('T')
 
 class BasePersonService(Generic[T]):
     """
-    Bazowa klasa serwisu dla operacji na osobach (studentach i profesorach).
+    Bazowa klasa serwisu dla operacji na osobach (np. studentach, pracownikach akademickich).
     Implementuje wspólną logikę dla wszystkich typów osób.
     """
     def __init__(self, validator: BaseValidator[T], repository: BasePersonRepository[T]):

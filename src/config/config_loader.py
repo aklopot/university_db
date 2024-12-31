@@ -11,7 +11,7 @@ def load_config() -> Dict[str, Any]:
         flattened_config = {
             "data_source": config["general"]["data_source"],
             "json_student_path": config["data_source"]["json"]["json_student_path"],
-            "json_professor_path": config["data_source"]["json"]["json_professor_path"],
+            "json_academic_staff_path": config["data_source"]["json"]["json_academic_staff_path"],
             "sqlite_url": config["data_source"]["sqlite"]["sqlite_url"],
             "postgres_url": config["data_source"]["postgres"]["postgres_url"]
         }

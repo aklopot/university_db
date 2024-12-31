@@ -1,9 +1,9 @@
 # postgres_repository.py: Zawiera klasy implementujące interfejsy zdefiniowane w folderze repozytoriów. Klasy te korzystają z bazy danych PostgreSQL do przechowywania danych.
 from typing import List
 from sqlmodel import SQLModel, Session, select, create_engine
-from src.models.universitydb import Student, Professor
+from src.models.universitydb import Student, AcademicStaff
 from src.repositories.base_repositories.base_student_repository import BaseStudentRepository
-from src.repositories.base_repositories.base_professor_repository import BaseProfessorRepository
+from src.repositories.base_repositories.base_academic_staff_repository import BaseAcademicStaffRepository
 
 class PostgresStudentRepository(BaseStudentRepository):
     def __init__(self, db_url: str):
@@ -40,37 +40,37 @@ class PostgresStudentRepository(BaseStudentRepository):
                 existing_student.gender = student.gender
                 session.commit()
 
-class PostgresProfessorRepository(BaseProfessorRepository):
+class PostgresAcademicStaffRepository(BaseAcademicStaffRepository):
     def __init__(self, db_url: str):
         self.engine = create_engine(db_url)
         SQLModel.metadata.create_all(self.engine)
 
-    def add_professor(self, professor: Professor) -> None:
+    def add_academic_staff(self, academic_staff: AcademicStaff) -> None:
         with Session(self.engine) as session:
-            session.add(professor)
+            session.add(academic_staff)
             session.commit()
 
-    def get_all_professors(self) -> List[Professor]:
+    def get_all_academic_staff(self) -> List[AcademicStaff]:
         with Session(self.engine) as session:
-            statement = select(Professor)
+            statement = select(AcademicStaff)
             return session.exec(statement).all()
 
-    def delete_professor_by_pesel(self, pesel: str) -> None:
+    def delete_academic_staff_by_pesel(self, pesel: str) -> None:
         with Session(self.engine) as session:
-            statement = select(Professor).where(Professor.pesel == pesel)
-            professor = session.exec(statement).first()
-            if professor:
-                session.delete(professor)
+            statement = select(AcademicStaff).where(AcademicStaff.pesel == pesel)
+            academic_staff = session.exec(statement).first()
+            if academic_staff:
+                session.delete(academic_staff)
                 session.commit()
 
-    def update_professor(self, professor: Professor) -> None:
+    def update_academic_staff(self, academic_staff: AcademicStaff) -> None:
         with Session(self.engine) as session:
-            existing_professor = session.get(Professor, professor.id)
-            if existing_professor:
-                existing_professor.first_name = professor.first_name
-                existing_professor.last_name = professor.last_name
-                existing_professor.address = professor.address
-                existing_professor.pesel = professor.pesel
-                existing_professor.gender = professor.gender
-                existing_professor.position = professor.position
+            existing_academic_staff = session.get(AcademicStaff, academic_staff.id)
+            if existing_academic_staff:
+                existing_academic_staff.first_name = academic_staff.first_name
+                existing_academic_staff.last_name = academic_staff.last_name
+                existing_academic_staff.address = academic_staff.address
+                existing_academic_staff.pesel = academic_staff.pesel
+                existing_academic_staff.gender = academic_staff.gender
+                existing_academic_staff.position = academic_staff.position
                 session.commit()

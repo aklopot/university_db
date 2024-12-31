@@ -5,14 +5,14 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
 from kivy.uix.spinner import Spinner  # Import Spinner dla listy rozwijanej
 from src.services.service_factory import ServiceFactory
-from src.models.universitydb import Address, Gender, Professor, AcademicPosition
+from src.models.universitydb import Address, Gender, AcademicStaff, AcademicPosition
 import json
 
-class ProfessorForm(Screen):
+class AcademicStaffForm(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
-        self.service = ServiceFactory().get_professor_service()
+        self.service = ServiceFactory().get_academic_staff_service()
         self.gender_service = ServiceFactory().get_gender_service()
         self.address_service = ServiceFactory().get_address_service()
         
@@ -56,7 +56,7 @@ class ProfessorForm(Screen):
         button_layout = BoxLayout(size_hint_y=None, height=50)
         
         save_button = Button(text="Save")
-        save_button.bind(on_press=self.save_professor)
+        save_button.bind(on_press=self.save_academic_staff)
         button_layout.add_widget(save_button)
         
         cancel_button = Button(text="Cancel")
@@ -67,8 +67,8 @@ class ProfessorForm(Screen):
         
         self.add_widget(self.layout)
         
-        # Aktualny profesor (do edycji)
-        self.current_professor = None
+        # Aktualny pracownik akademicki (do edycji)
+        self.current_academic_staff = None
         self.selected_address = None  # Przechowuje wybrany adres
         self.selected_gender = None   # Przechowuje wybraną płeć
         
@@ -81,41 +81,41 @@ class ProfessorForm(Screen):
         self.selected_gender_label.text = 'No Gender Selected'
         self.selected_address_label.text = 'No Address Selected'
         
-        self.current_professor = None
+        self.current_academic_staff = None
         self.selected_address = None
         self.selected_gender = None
         
-    def load_professor(self, professor):
-        # Ładuje dane profesora do formularza (edycja)
-        self.current_professor = professor
-        self.first_name_input.text = professor.first_name
-        self.last_name_input.text = professor.last_name
-        self.pesel_input.text = professor.pesel
-        self.position_spinner.text = professor.position.value  # Ustawienie Spinnera
+    def load_academic_staff(self, academic_staff):
+        # Ładuje dane pracownika akademickiego do formularza (edycja)
+        self.current_academic_staff = academic_staff
+        self.first_name_input.text = academic_staff.first_name
+        self.last_name_input.text = academic_staff.last_name
+        self.pesel_input.text = academic_staff.pesel
+        self.position_spinner.text = academic_staff.position.value  # Ustawienie Spinnera
         
-        # Wyświetl płeć profesora
-        self.selected_gender = professor.gender
-        self.selected_gender_label.text = professor.gender.name
+        # Wyświetl płeć pracownika akademickiego
+        self.selected_gender = academic_staff.gender
+        self.selected_gender_label.text = academic_staff.gender.name
         
-        # Wyświetl adres profesora
-        self.selected_address = professor.address
-        self.selected_address_label.text = f"{professor.address.street}, {professor.address.city}"
+        # Wyświetl adres pracownika akademickiego
+        self.selected_address = academic_staff.address
+        self.selected_address_label.text = f"{academic_staff.address.street}, {academic_staff.address.city}"
         
     def open_gender_selection(self, instance):
         # Przejdź do ekranu wyboru płci
         self.manager.current = 'gender_selection'
         gender_selection_screen = self.manager.get_screen('gender_selection')
-        gender_selection_screen.previous_screen = 'professor_form'
+        gender_selection_screen.previous_screen = 'academic_staff_form'
         gender_selection_screen.parent_form = self  # Przekazujemy referencję do tego formularza
         
     def open_address_selection(self, instance):
         # Przejdź do ekranu wyboru adresu
         self.manager.current = 'address_selection'
         address_selection_screen = self.manager.get_screen('address_selection')
-        address_selection_screen.previous_screen = 'professor_form'
+        address_selection_screen.previous_screen = 'academic_staff_form'
         address_selection_screen.parent_form = self  # Przekazujemy referencję do tego formularza
         
-    def save_professor(self, instance):
+    def save_academic_staff(self, instance):
         # Pobierz dane z pól formularza
         first_name = self.first_name_input.text
         last_name = self.last_name_input.text
@@ -131,19 +131,19 @@ class ProfessorForm(Screen):
             return
         
         try:
-            if self.current_professor:
-                # Aktualizacja istniejącego profesora
-                self.current_professor.first_name = first_name
-                self.current_professor.last_name = last_name
-                self.current_professor.pesel = pesel
-                self.current_professor.position = position
-                self.current_professor.gender = self.selected_gender
-                self.current_professor.address = self.selected_address
+            if self.current_academic_staff:
+                # Aktualizacja istniejącego pracownika akademickiego
+                self.current_academic_staff.first_name = first_name
+                self.current_academic_staff.last_name = last_name
+                self.current_academic_staff.pesel = pesel
+                self.current_academic_staff.position = position
+                self.current_academic_staff.gender = self.selected_gender
+                self.current_academic_staff.address = self.selected_address
                 
-                self.service.update_professor(self.current_professor)
+                self.service.update_academic_staff(self.current_academic_staff)
             else:
-                # Dodanie nowego profesora
-                professor = Professor(
+                # Dodanie nowego pracownika akademickiego
+                academic_staff = AcademicStaff(
                     first_name=first_name,
                     last_name=last_name,
                     pesel=pesel,
@@ -151,16 +151,16 @@ class ProfessorForm(Screen):
                     gender=self.selected_gender,
                     address=self.selected_address
                 )
-                self.service.add_professor(professor)
+                self.service.add_academic_staff(academic_staff)
             
-            # Po zapisaniu wróć do widoku listy profesorów
-            self.manager.current = 'professor_view'
+            # Po zapisaniu wróć do widoku listy pracowników akademickich
+            self.manager.current = 'academic_staff_view'
             self.clear_form()
         except Exception as e:
             # Obsłuż ewentualne błędy
-            print(f"Błąd podczas zapisywania profesora: {e}")
+            print(f"Błąd podczas zapisywania pracownika akademickiego: {e}")
         
     def cancel(self, instance):
-        # Wróć do widoku listy profesorów bez zapisywania
-        self.manager.current = 'professor_view'
+        # Wróć do widoku listy pracowników akademickich bez zapisywania
+        self.manager.current = 'academic_staff_view'
         self.clear_form()

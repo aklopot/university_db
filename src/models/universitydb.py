@@ -10,7 +10,7 @@ class Gender(SQLModel, table=True):
     name: str = Field(sa_column=Column(String, unique=True, index=True))
 
     students: List["Student"] = Relationship(back_populates="gender")
-    professors: List["Professor"] = Relationship(back_populates="gender")
+    academic_staff: List["AcademicStaff"] = Relationship(back_populates="gender")
 
 
 class Address(SQLModel, table=True):
@@ -24,7 +24,7 @@ class Address(SQLModel, table=True):
     country: str
 
     students: List["Student"] = Relationship(back_populates="address")
-    professors: List["Professor"] = Relationship(back_populates="address")
+    academic_staff: List["AcademicStaff"] = Relationship(back_populates="address")
 
 
 class Student(SQLModel, table=True):
@@ -47,9 +47,9 @@ class AcademicPosition(str, Enum):
     PROFESSOR = "Professor"
     LECTURER = "Lecturer"
 
-class Professor(SQLModel, table=True):
-    __tablename__ = "professor"
-    professor_id: Optional[int] = Field(default=None, primary_key=True)
+class AcademicStaff(SQLModel, table=True):
+    __tablename__ = "academic_staff"
+    academic_staff_id: Optional[int] = Field(default=None, primary_key=True)
     first_name: str
     last_name: str
     address_id: Optional[int] = Field(default=None, foreign_key="address.address_id")
@@ -57,5 +57,5 @@ class Professor(SQLModel, table=True):
     gender_id: Optional[int] = Field(default=None, foreign_key="gender.gender_id")
     position: AcademicPosition = Field(sa_column=Column(SAEnum(AcademicPosition)))
     
-    address: Optional[Address] = Relationship(back_populates="professors")
-    gender: Optional[Gender] = Relationship(back_populates="professors")
+    address: Optional[Address] = Relationship(back_populates="academic_staff")
+    gender: Optional[Gender] = Relationship(back_populates="academic_staff")

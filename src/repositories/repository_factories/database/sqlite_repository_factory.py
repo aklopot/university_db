@@ -1,12 +1,12 @@
 from src.repositories.repository_factories.repository_factory_interface import RepositoryFactoryInterface
 from src.repositories.repository_factories.database.sqlite.sqlite_repository import (
     SQLiteStudentRepository, 
-    SQLiteProfessorRepository,
+    SQLiteAcademicStaffRepository,
     SQLiteGenderRepository,
     SQLiteAddressRepository
 )
 from src.repositories.base_repositories.base_student_repository import BaseStudentRepository
-from src.repositories.base_repositories.base_professor_repository import BaseProfessorRepository
+from src.repositories.base_repositories.base_academic_staff_repository import BaseAcademicStaffRepository
 from src.repositories.base_repositories.base_gender_repository import BaseGenderRepository
 from src.repositories.base_repositories.base_address_repository import BaseAddressRepository
 
@@ -17,8 +17,8 @@ class SQLiteRepositoryFactory(RepositoryFactoryInterface):
     def create_student_repository(self) -> BaseStudentRepository:
         return SQLiteStudentRepository(self.config["sqlite_url"])
         
-    def create_professor_repository(self) -> BaseProfessorRepository:
-        return SQLiteProfessorRepository(self.config["sqlite_url"])
+    def create_academic_staff_repository(self) -> BaseAcademicStaffRepository:
+        return SQLiteAcademicStaffRepository(self.config["sqlite_url"])
         
     def create_gender_repository(self) -> BaseGenderRepository:
         return SQLiteGenderRepository(self.config["sqlite_url"])

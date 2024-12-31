@@ -13,7 +13,7 @@ class MenuScreen(Screen):
 
         # Tytuł z większą czcionką
         title_label = Label(
-            text="Akademicka baza danych studentów\ni profesorów",
+            text="Akademicka baza danych studentów\ni pracowników akademickich",
             font_size='24sp',
             halign='center',
             valign='middle'
@@ -40,9 +40,9 @@ class MenuScreen(Screen):
         student_button.bind(on_press=lambda x: self.go_to_view('student_view'))
         layout.add_widget(student_button)
 
-        professor_button = Button(text='Zarządzaj profesorami', size_hint_y=None, height=50)
-        professor_button.bind(on_press=lambda x: self.go_to_view('professor_view'))
-        layout.add_widget(professor_button)
+        academic_staff_button = Button(text='Zarządzaj pracownikami', size_hint_y=None, height=50)
+        academic_staff_button.bind(on_press=lambda x: self.go_to_view('academic_staff_view'))
+        layout.add_widget(academic_staff_button)
 
         # Dodanie przycisku wyjścia z programu
         exit_button = Button(text='Zamknij program', size_hint_y=None, height=50)

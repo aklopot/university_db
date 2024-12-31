@@ -77,7 +77,7 @@ class StudentView(Screen):
     def delete_student(self, student):
         # Potwierdzenie usunięcia
         content = BoxLayout(orientation='vertical')
-        content.add_widget(Label(text=f"Are you sure you want to delete student {student.first_name} {student.last_name}?"))
+        content.add_widget(Label(text=f"Czy na pewno chcesz usunąć tego studenta:{student.first_name} {student.last_name}?"))
 
         button_layout = BoxLayout(size_hint_y=None, height=50)
         yes_button = Button(text='Yes')

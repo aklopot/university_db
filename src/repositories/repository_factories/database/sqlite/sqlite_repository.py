@@ -1,9 +1,9 @@
-# sqlite_repository.py: Jest to moduł implementujący interfejsy BaseStudentRepository i BaseProfessorRepository. Używa klas SQLModel i Session z pakietu sqlmodel do interakcji z bazą danych SQLite. Dostarcza metod dodawania, pobierania, usuwania i aktualizowania rekordów studentów i profesorów w bazie danych.
+# sqlite_repository.py: Jest to moduł implementujący interfejsy BaseStudentRepository i BaseAcademicStaffRepository. Używa klas SQLModel i Session z pakietu sqlmodel do interakcji z bazą danych SQLite. Dostarcza metod dodawania, pobierania, usuwania i aktualizowania rekordów studentów i pracowników akademickich w bazie danych.
 from typing import List, Optional
 from sqlmodel import SQLModel, Session, select, create_engine
-from src.models.universitydb import Address, Gender, Student, Professor
+from src.models.universitydb import Address, Gender, Student, AcademicStaff
 from src.repositories.base_repositories.base_student_repository import BaseStudentRepository
-from src.repositories.base_repositories.base_professor_repository import BaseProfessorRepository
+from src.repositories.base_repositories.base_academic_staff_repository import BaseAcademicStaffRepository
 from src.repositories.base_repositories.base_gender_repository import BaseGenderRepository
 from src.repositories.base_repositories.base_address_repository import BaseAddressRepository
 from sqlalchemy.orm import joinedload, selectinload
@@ -50,7 +50,7 @@ class SQLiteStudentRepository(BaseStudentRepository):
                 existing_student.gender_id = student.gender_id
                 session.commit()
 
-class SQLiteProfessorRepository(BaseProfessorRepository):
+class SQLiteAcademicStaffRepository(BaseAcademicStaffRepository):
     def __init__(self, db_url: str):
         self.engine = create_engine(db_url)
         self.create_all_tables()
@@ -59,43 +59,38 @@ class SQLiteProfessorRepository(BaseProfessorRepository):
         # Upewnij się, że wszystkie wymagane tabele są tworzone w odpowiedniej kolejności
         SQLModel.metadata.create_all(self.engine)
 
-    def add_professor(self, professor: Professor) -> None:
+    def add_academic_staff(self, academic_staff: AcademicStaff) -> None:
         with Session(self.engine) as session:
-            session.add(professor)
+            session.add(academic_staff)
             session.commit()
 
-    def get_all_professors(self) -> List[Professor]:
+    def get_all_academic_staff(self) -> List[AcademicStaff]:
         with Session(self.engine) as session:
-            statement = select(Professor)
-            return session.exec(statement).all()
-
-    def delete_professor_by_pesel(self, pesel: str) -> None:
-        with Session(self.engine) as session:
-            statement = select(Professor).where(Professor.pesel == pesel)
-            professor = session.exec(statement).first()
-            if professor:
-                session.delete(professor)
-                session.commit()
-
-    def update_professor(self, professor: Professor) -> None:
-        with Session(self.engine) as session:
-            existing_professor = session.get(Professor, professor.professor_id)
-            if existing_professor:
-                existing_professor.first_name = professor.first_name
-                existing_professor.last_name = professor.last_name
-                existing_professor.address_id = professor.address_id
-                existing_professor.pesel = professor.pesel
-                existing_professor.gender_id = professor.gender_id
-                existing_professor.position = professor.position
-                session.commit()
-
-    def get_all_professors(self) -> List[Professor]:
-        with Session(self.engine) as session:
-            statement = select(Professor).options(
-                selectinload(Professor.gender),
-                selectinload(Professor.address)
+            statement = select(AcademicStaff).options(
+                selectinload(AcademicStaff.gender),
+                selectinload(AcademicStaff.address)
             )
             return session.exec(statement).all()
+
+    def delete_academic_staff_by_pesel(self, pesel: str) -> None:
+        with Session(self.engine) as session:
+            statement = select(AcademicStaff).where(AcademicStaff.pesel == pesel)
+            academic_staff = session.exec(statement).first()
+            if academic_staff:
+                session.delete(academic_staff)
+                session.commit()
+
+    def update_academic_staff(self, academic_staff: AcademicStaff) -> None:
+        with Session(self.engine) as session:
+            existing_academic_staff = session.get(AcademicStaff, academic_staff.academic_staff_id)
+            if existing_academic_staff:
+                existing_academic_staff.first_name = academic_staff.first_name
+                existing_academic_staff.last_name = academic_staff.last_name
+                existing_academic_staff.address_id = academic_staff.address_id
+                existing_academic_staff.pesel = academic_staff.pesel
+                existing_academic_staff.gender_id = academic_staff.gender_id
+                existing_academic_staff.position = academic_staff.position
+                session.commit()
 
 class SQLiteGenderRepository(BaseGenderRepository):
     def __init__(self, db_url: str):

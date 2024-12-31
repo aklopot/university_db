@@ -2,7 +2,7 @@
 from src.repositories.repository_factories.repository_factory_registry import RepositoryFactoryRegistry
 from src.repositories.repository_factories.repository_factory_interface import RepositoryFactoryInterface
 from src.repositories.base_repositories.base_student_repository import BaseStudentRepository
-from src.repositories.base_repositories.base_professor_repository import BaseProfessorRepository
+from src.repositories.base_repositories.base_academic_staff_repository import BaseAcademicStaffRepository
 from src.repositories.base_repositories.base_gender_repository import BaseGenderRepository
 from src.repositories.base_repositories.base_address_repository import BaseAddressRepository
 from src.config.config_loader import load_config
@@ -19,8 +19,8 @@ class RepositoryFactory:
     def get_student_repository(self) -> BaseStudentRepository:
         return self.factory.create_student_repository()
         
-    def get_professor_repository(self) -> BaseProfessorRepository:
-        return self.factory.create_professor_repository()
+    def get_academic_staff_repository(self) -> BaseAcademicStaffRepository:
+        return self.factory.create_academic_staff_repository()
         
     def get_gender_repository(self) -> BaseGenderRepository:
         return self.factory.create_gender_repository()
