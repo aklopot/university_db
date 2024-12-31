@@ -27,6 +27,14 @@ class Address(SQLModel, table=True):
     academic_staff: List["AcademicStaff"] = Relationship(back_populates="address")
 
 
+class FieldOfStudy(SQLModel, table=True):
+    __tablename__ = "field_of_study"
+    field_of_study_id: Optional[int] = Field(default=None, primary_key=True)
+    field_name: str = Field(sa_column=Column(String(100), nullable=False))
+    
+    students: List["Student"] = Relationship(back_populates="field_of_study")
+
+
 class Student(SQLModel, table=True):
     __tablename__ = "student"
     student_id: Optional[int] = Field(default=None, primary_key=True)
@@ -36,9 +44,11 @@ class Student(SQLModel, table=True):
     index_number: str
     pesel: str
     gender_id: Optional[int] = Field(default=None, foreign_key="gender.gender_id")
+    field_of_study_id: Optional[int] = Field(default=None, foreign_key="field_of_study.field_of_study_id")
     
     address: Optional[Address] = Relationship(back_populates="students")
     gender: Optional[Gender] = Relationship(back_populates="students")
+    field_of_study: Optional[FieldOfStudy] = Relationship(back_populates="students")
 
 
 class AcademicPosition(str, Enum):
