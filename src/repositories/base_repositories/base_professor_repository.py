@@ -2,7 +2,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 from src.models.universitydb import Professor
-from src.repositories.base_person_repository import BasePersonRepository
+from src.repositories.base_repositories.base_person_repository import BasePersonRepository
 
 class BaseProfessorRepository(BasePersonRepository[Professor]):
     """

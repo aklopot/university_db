@@ -1,11 +1,11 @@
 # students_service.py: Zawiera definicję klasy StudentService, która jest odpowiedzialna za obsługę operacji na studentach. Klasa ta korzysta z repozytorium studentów, które jest przekazywane w konstruktorze. StudentService udostępnia metody do dodawania, usuwania i aktualizowania studentów, a także pobierania listy wszystkich studentów.
 from typing import List
 from src.models.universitydb import Student
-from src.services.base_person_service import PersonService
-from src.services.validators.student_validator import StudentValidator
+from src.services.service_factories.base_person_service import BasePersonService
+from src.services.service_factories.validators.student_validator import StudentValidator
 from src.repositories.repository_factory import RepositoryFactory
 
-class StudentService(PersonService[Student]):
+class StudentService(BasePersonService[Student]):
     """
     Serwis odpowiedzialny za operacje na studentach.
     """

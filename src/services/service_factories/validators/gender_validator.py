@@ -1,7 +1,7 @@
 from typing import Optional
 from src.models.universitydb import Gender
-from src.services.gender_service import GenderService
-from src.services.validators.base_validator import BaseValidator
+from src.services.service_factories.gender_service import GenderService
+from src.services.service_factories.validators.base_validator import BaseValidator
 from src.services.exceptions.exceptions import ValidationError
 
 class GenderValidator(BaseValidator[str]):

@@ -1,8 +1,8 @@
 # json_repository.py: Zawiera implementacje repozytoriów dla Studentów i Profesorów, które korzystają z plików JSON do przechowywania danych.
 from typing import List
 from src.models.universitydb import Student, Professor
-from src.repositories.base_student_repository import BaseStudentRepository
-from src.repositories.base_professor_repository import BaseProfessorRepository
+from src.repositories.base_repositories.base_student_repository import BaseStudentRepository
+from src.repositories.base_repositories.base_professor_repository import BaseProfessorRepository
 import json
 
 # Repozytorium dla Studentów

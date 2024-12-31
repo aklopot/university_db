@@ -1,7 +1,7 @@
 from typing import Optional
 from src.models.universitydb import Address
-from src.services.address_service import AddressService
-from src.services.validators.base_validator import BaseValidator
+from src.services.service_factories.address_service import AddressService
+from src.services.service_factories.validators.base_validator import BaseValidator
 from src.services.exceptions.exceptions import ValidationError
 
 class AddressValidator(BaseValidator[int]):

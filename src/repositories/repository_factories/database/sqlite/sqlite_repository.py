@@ -2,10 +2,10 @@
 from typing import List, Optional
 from sqlmodel import SQLModel, Session, select, create_engine
 from src.models.universitydb import Address, Gender, Student, Professor
-from src.repositories.base_student_repository import BaseStudentRepository
-from src.repositories.base_professor_repository import BaseProfessorRepository
-from src.repositories.base_gender_repository import BaseGenderRepository
-from src.repositories.base_address_repository import BaseAddressRepository
+from src.repositories.base_repositories.base_student_repository import BaseStudentRepository
+from src.repositories.base_repositories.base_professor_repository import BaseProfessorRepository
+from src.repositories.base_repositories.base_gender_repository import BaseGenderRepository
+from src.repositories.base_repositories.base_address_repository import BaseAddressRepository
 from sqlalchemy.orm import joinedload, selectinload
 
 class SQLiteStudentRepository(BaseStudentRepository):

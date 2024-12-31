@@ -1,11 +1,11 @@
 from typing import Generic, TypeVar, List
-from src.services.validators.base_validator import BaseValidator
-from src.repositories.base_person_repository import BasePersonRepository
+from src.services.service_factories.validators.base_validator import BaseValidator
+from src.repositories.base_repositories.base_person_repository import BasePersonRepository
 from src.services.exceptions.exceptions import ValidationError
 
 T = TypeVar('T')
 
-class PersonService(Generic[T]):
+class BasePersonService(Generic[T]):
     """
     Bazowa klasa serwisu dla operacji na osobach (studentach i profesorach).
     Implementuje wspólną logikę dla wszystkich typów osób.

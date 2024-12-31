@@ -1,0 +1,9 @@
+from src.repositories.repository_factories.repository_factory_registry import RepositoryFactoryRegistry
+from src.repositories.repository_factories.database.json_repository_factory import JSONRepositoryFactory
+from src.repositories.repository_factories.database.sqlite_repository_factory import SQLiteRepositoryFactory
+from src.repositories.repository_factories.database.postgres_repository_factory import PostgresRepositoryFactory
+
+# Rejestracja dostępnych fabryk
+RepositoryFactoryRegistry.register("json", JSONRepositoryFactory)
+RepositoryFactoryRegistry.register("sqlite", SQLiteRepositoryFactory)
+RepositoryFactoryRegistry.register("postgres", PostgresRepositoryFactory)

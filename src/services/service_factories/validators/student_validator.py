@@ -1,4 +1,4 @@
-from src.services.validators.person_validator import BasePersonValidator
+from src.services.service_factories.validators.person_validator import BasePersonValidator
 from src.models.universitydb import Student
 from src.services.exceptions.exceptions import ValidationError
 

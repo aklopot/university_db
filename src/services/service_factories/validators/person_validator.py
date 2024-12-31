@@ -1,5 +1,6 @@
+from abc import abstractmethod
 from typing import TypeVar, Generic
-from src.services.validators.base_validator import BaseValidator
+from src.services.service_factories.validators.base_validator import BaseValidator
 from src.models.pesel import PESEL
 from src.services.exceptions.exceptions import ValidationError
 
@@ -33,6 +34,8 @@ class BasePersonValidator(BaseValidator[T], Generic[T]):
         # Walidacja specyficzna dla konkretnego typu osoby
         self._validate_specific(person)
 
+
+    @abstractmethod
     def _validate_specific(self, person: T) -> None:
         """
         Metoda do nadpisania przez klasy pochodne.

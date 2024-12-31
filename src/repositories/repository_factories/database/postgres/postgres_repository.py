@@ -2,8 +2,8 @@
 from typing import List
 from sqlmodel import SQLModel, Session, select, create_engine
 from src.models.universitydb import Student, Professor
-from src.repositories.base_student_repository import BaseStudentRepository
-from src.repositories.base_professor_repository import BaseProfessorRepository
+from src.repositories.base_repositories.base_student_repository import BaseStudentRepository
+from src.repositories.base_repositories.base_professor_repository import BaseProfessorRepository
 
 class PostgresStudentRepository(BaseStudentRepository):
     def __init__(self, db_url: str):
