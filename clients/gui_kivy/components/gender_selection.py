@@ -53,7 +53,7 @@ class GenderSelectionScreen(Screen):
         
         for gender in genders:
             gender_box = BoxLayout(orientation='horizontal', size_hint_y=None, height=50)
-            gender_box.add_widget(Label(text=gender.name, size_hint_x=0.6))
+            gender_box.add_widget(Label(text=gender.gender_name, size_hint_x=0.6))
             
             select_btn = Button(text='Select', size_hint_x=0.2)
             select_btn.bind(on_press=lambda instance, gender=gender: self.select_gender(gender))
@@ -72,7 +72,7 @@ class GenderSelectionScreen(Screen):
     def select_gender(self, gender):
         # Ustaw wybraną płeć w formularzu rodzica
         self.parent_form.selected_gender = gender
-        self.parent_form.selected_gender_label.text = gender.name
+        self.parent_form.selected_gender_label.text = gender.gender_name
         # Wróć do formularza studenta
         self.manager.current = self.previous_screen
         
@@ -93,7 +93,7 @@ class GenderSelectionScreen(Screen):
     def delete_gender(self, gender):
         # Potwierdzenie usunięcia płci
         content = BoxLayout(orientation='vertical')
-        content.add_widget(Label(text=f"Are you sure you want to delete gender '{gender.name}'?"))
+        content.add_widget(Label(text=f"Are you sure you want to delete gender '{gender.gender_name}'?"))
         
         button_layout = BoxLayout(size_hint_y=None, height=50)
         yes_button = Button(text='Yes')

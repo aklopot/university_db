@@ -40,7 +40,7 @@ class GenderForm(Screen):
     def load_gender(self, gender):
         # Ładuje dane płci do formularza (edycja)
         self.gender = gender
-        self.name_input.text = gender.name
+        self.name_input.text = gender.gender_name
 
     def clear_form(self):
         # Czyści formularz (dodawanie nowej płci)
@@ -52,7 +52,7 @@ class GenderForm(Screen):
         if gender_name:
             if self.gender:
                 # Aktualizacja istniejącej płci
-                self.gender.name = gender_name
+                self.gender.gender_name = gender_name
                 self.gender_service.update_gender(self.gender)
             else:
                 # Dodanie nowej płci

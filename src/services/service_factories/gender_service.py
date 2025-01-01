@@ -8,7 +8,7 @@ class GenderService:
         self.repository = RepositoryFactory().get_gender_repository()
 
     def add_gender(self, name: str):
-        gender = Gender(name=name)
+        gender = Gender(gender_name=name)
         self.repository.add_gender(gender)
 
     def update_gender(self, gender: Gender):

@@ -95,7 +95,7 @@ class AcademicStaffForm(Screen):
         
         # Wyświetl płeć pracownika akademickiego
         self.selected_gender = academic_staff.gender
-        self.selected_gender_label.text = academic_staff.gender.name
+        self.selected_gender_label.text = academic_staff.gender.gender_name
         
         # Wyświetl adres pracownika akademickiego
         self.selected_address = academic_staff.address

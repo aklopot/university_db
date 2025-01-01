@@ -7,7 +7,7 @@ from sqlalchemy import Enum as SAEnum
 class Gender(SQLModel, table=True):
     __tablename__ = "gender"
     gender_id: Optional[int] = Field(default=None, primary_key=True)
-    name: str = Field(sa_column=Column(String, unique=True, index=True))
+    gender_name: str = Field(sa_column=Column(String(100), unique=True, index=True))
 
     students: List["Student"] = Relationship(back_populates="gender")
     academic_staff: List["AcademicStaff"] = Relationship(back_populates="gender")

@@ -108,7 +108,7 @@ class StudentForm(Screen):
         
         # Wyświetl płeć studenta
         self.selected_gender = student.gender
-        self.selected_gender_label.text = student.gender.name
+        self.selected_gender_label.text = student.gender.gender_name
         
         # Wyświetl adres studenta
         self.selected_address = student.address

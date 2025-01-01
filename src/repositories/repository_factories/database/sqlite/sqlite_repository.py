@@ -113,7 +113,7 @@ class SQLiteGenderRepository(BaseGenderRepository):
         with Session(self.engine) as session:
             existing_gender = session.get(Gender, gender.gender_id)
             if existing_gender:
-                existing_gender.name = gender.name
+                existing_gender.gender_name = gender.gender_name
                 session.commit()
 
     def get_all_genders(self) -> List[Gender]:
