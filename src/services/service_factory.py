@@ -5,6 +5,7 @@ from src.services.service_factories.academic_staff_service import AcademicStaffS
 from src.services.service_factories.gender_service import GenderService
 from src.services.service_factories.address_service import AddressService
 from src.services.service_factories.field_of_study_service import FieldOfStudyService
+from src.services.service_factories.academic_course_service import AcademicCourseService
 
 class ServiceFactory:
     def get_student_service(self) -> StudentService:
@@ -21,3 +22,6 @@ class ServiceFactory:
 
     def get_field_of_study_service(self) -> FieldOfStudyService:
         return FieldOfStudyService()
+
+    def get_academic_course_service(self) -> AcademicCourseService:
+        return AcademicCourseService()
