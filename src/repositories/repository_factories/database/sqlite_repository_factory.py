@@ -1,11 +1,9 @@
 from src.repositories.repository_factories.repository_factory_interface import RepositoryFactoryInterface
-from src.repositories.repository_factories.database.sqlite.sqlite_repository import (
-    SQLiteStudentRepository, 
-    SQLiteAcademicStaffRepository,
-    SQLiteGenderRepository,
-    SQLiteAddressRepository,
-    SQLiteFieldOfStudyRepository
-)
+from src.repositories.repository_factories.database.sqlite.sqlite_student_repository import SQLiteStudentRepository
+from src.repositories.repository_factories.database.sqlite.sqlite_academic_staff_repository import SQLiteAcademicStaffRepository
+from src.repositories.repository_factories.database.sqlite.sqlite_gender_repository import SQLiteGenderRepository
+from src.repositories.repository_factories.database.sqlite.sqlite_address_repository import SQLiteAddressRepository
+from src.repositories.repository_factories.database.sqlite.sqlite_field_of_study_repository import SQLiteFieldOfStudyRepository
 from src.repositories.base_repositories.base_student_repository import BaseStudentRepository
 from src.repositories.base_repositories.base_academic_staff_repository import BaseAcademicStaffRepository
 from src.repositories.base_repositories.base_gender_repository import BaseGenderRepository
