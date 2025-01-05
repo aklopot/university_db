@@ -4,11 +4,13 @@ from src.repositories.repository_factories.database.sqlite.sqlite_academic_staff
 from src.repositories.repository_factories.database.sqlite.sqlite_gender_repository import SQLiteGenderRepository
 from src.repositories.repository_factories.database.sqlite.sqlite_address_repository import SQLiteAddressRepository
 from src.repositories.repository_factories.database.sqlite.sqlite_field_of_study_repository import SQLiteFieldOfStudyRepository
+from src.repositories.repository_factories.database.sqlite.sqlite_academic_course_repository import SQLiteAcademicCourseRepository
 from src.repositories.base_repositories.base_student_repository import BaseStudentRepository
 from src.repositories.base_repositories.base_academic_staff_repository import BaseAcademicStaffRepository
 from src.repositories.base_repositories.base_gender_repository import BaseGenderRepository
 from src.repositories.base_repositories.base_address_repository import BaseAddressRepository
 from src.repositories.base_repositories.base_field_of_study_repository import BaseFieldOfStudyRepository
+from src.repositories.base_repositories.base_academic_course_repository import BaseAcademicCourseRepository
 
 class SQLiteRepositoryFactory(RepositoryFactoryInterface):
     def __init__(self, config: dict):
@@ -27,4 +29,7 @@ class SQLiteRepositoryFactory(RepositoryFactoryInterface):
         return SQLiteAddressRepository(self.config["sqlite_url"])
         
     def create_field_of_study_repository(self) -> BaseFieldOfStudyRepository:
-        return SQLiteFieldOfStudyRepository(self.config["sqlite_url"]) 
+        return SQLiteFieldOfStudyRepository(self.config["sqlite_url"])
+        
+    def create_academic_course_repository(self) -> BaseAcademicCourseRepository:
+        return SQLiteAcademicCourseRepository(self.config["sqlite_url"]) 
