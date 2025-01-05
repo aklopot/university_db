@@ -43,6 +43,11 @@ class MenuScreen(Screen):
         academic_staff_button = Button(text='Zarządzaj pracownikami', size_hint_y=None, height=50)
         academic_staff_button.bind(on_press=lambda x: self.go_to_view('academic_staff_view'))
         layout.add_widget(academic_staff_button)
+        
+        # Dodaj przycisk do zarządzania kursami
+        academic_course_button = Button(text='Zarządzaj kursami akademickimi', size_hint_y=None, height=50)
+        academic_course_button.bind(on_press=lambda x: self.go_to_view('academic_course_view'))
+        layout.add_widget(academic_course_button)
 
         # Dodanie przycisku wyjścia z programu
         exit_button = Button(text='Zamknij program', size_hint_y=None, height=50)

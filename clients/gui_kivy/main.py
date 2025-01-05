@@ -9,6 +9,8 @@ from clients.gui_kivy.components.gender_form import GenderForm
 from clients.gui_kivy.components.address_selection import AddressSelectionScreen
 from clients.gui_kivy.components.address_form import AddressForm
 from clients.gui_kivy.components.gender_selection import GenderSelectionScreen
+from clients.gui_kivy.components.academic_course_view import AcademicCourseView
+from clients.gui_kivy.components.academic_course_form import AcademicCourseForm
 
 class UniversityDBApp(App):
     def build(self):
@@ -22,7 +24,8 @@ class UniversityDBApp(App):
         sm.add_widget(AddressForm(name='address_form'))
         sm.add_widget(AcademicStaffView(name='academic_staff_view'))
         sm.add_widget(AcademicStaffForm(name='academic_staff_form'))
-        # sm.add_widget(GenderView(name='gender_view'))
+        sm.add_widget(AcademicCourseView(name='academic_course_view'))
+        sm.add_widget(AcademicCourseForm(name='academic_course_form')) 
         sm.add_widget(GenderForm(name='gender_form'))
         sm.add_widget(GenderSelectionScreen(name='gender_selection'))
 
