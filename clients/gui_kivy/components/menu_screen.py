@@ -3,8 +3,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
-from kivy.app import App
-from kivy.uix.popup import Popup
+from clients.gui_kivy.utils.dialog_utils import DialogUtils
 
 class MenuScreen(Screen):
     def __init__(self, **kwargs):
@@ -50,40 +49,16 @@ class MenuScreen(Screen):
         layout.add_widget(academic_course_button)
 
         # Dodanie przycisku wyjścia z programu
-        exit_button = Button(text='Zamknij program', size_hint_y=None, height=50)
-        exit_button.bind(on_press=lambda x: self.show_exit_confirmation())
+        exit_button = Button(
+            text='Zamknij program', 
+            size_hint_y=None, 
+            height=50,
+            background_color=(1, 0, 0, 1)
+        )
+        exit_button.bind(on_press=lambda x: DialogUtils.show_exit_confirmation())
         layout.add_widget(exit_button)
 
         self.add_widget(layout)
 
     def go_to_view(self, view_name):
         self.manager.current = view_name
-
-    def show_exit_confirmation(self):
-        # Utwórz treść okna dialogowego
-        content = BoxLayout(orientation='vertical', padding=10, spacing=10)
-
-        # Dodaj pytanie
-        question_label = Label(text="Czy na pewno chcesz zamknąć program?", font_size='18sp')
-        content.add_widget(question_label)
-
-        # Dodaj przyciski
-        button_layout = BoxLayout(size_hint_y=None, height=50, spacing=10)
-        
-        yes_button = Button(text="Tak")
-        yes_button.bind(on_press=lambda x: self.exit_program())
-        button_layout.add_widget(yes_button)
-        
-        no_button = Button(text="Nie")
-        no_button.bind(on_press=lambda x: exit_popup.dismiss())
-        button_layout.add_widget(no_button)
-        
-        content.add_widget(button_layout)
-
-        # Utwórz okno dialogowe
-        exit_popup = Popup(title="Potwierdzenie", content=content, size_hint=(0.6, 0.4))
-        exit_popup.open()
-
-    def exit_program(self):
-        # Wyjście z programu
-        App.get_running_app().stop()
