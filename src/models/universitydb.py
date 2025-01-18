@@ -3,6 +3,8 @@ from sqlmodel import SQLModel, Field, Relationship, Column, String, Integer
 from typing import Optional, List
 from enum import Enum
 from sqlalchemy import Enum as SAEnum
+from datetime import datetime
+from sqlalchemy import Float
 
 class Gender(SQLModel, table=True):
     __tablename__ = "gender"
@@ -41,8 +43,11 @@ class AcademicCourse(SQLModel, table=True):
     academic_course_name: str = Field(sa_column=Column(String(100), nullable=False))
     ects_credits: int = Field(sa_column=Column(Integer, nullable=False))
     field_of_study_id: Optional[int] = Field(default=None, foreign_key="field_of_study.field_of_study_id")
+    academic_staff_id: Optional[int] = Field(default=None, foreign_key="academic_staff.academic_staff_id")
 
     field_of_study: Optional[FieldOfStudy] = Relationship(back_populates="academic_course")
+    academic_staff: Optional["AcademicStaff"] = Relationship(back_populates="academic_courses")
+    student_grades: List["StudentGrade"] = Relationship(back_populates="academic_course")
 
 class Student(SQLModel, table=True):
     __tablename__ = "student"
@@ -58,6 +63,7 @@ class Student(SQLModel, table=True):
     address: Optional[Address] = Relationship(back_populates="students")
     gender: Optional[Gender] = Relationship(back_populates="students")
     field_of_study: Optional[FieldOfStudy] = Relationship(back_populates="students")
+    grades: List["StudentGrade"] = Relationship(back_populates="student")
 
 
 class AcademicPosition(str, Enum):
@@ -78,3 +84,27 @@ class AcademicStaff(SQLModel, table=True):
     
     address: Optional[Address] = Relationship(back_populates="academic_staff")
     gender: Optional[Gender] = Relationship(back_populates="academic_staff")
+    academic_courses: List[AcademicCourse] = Relationship(back_populates="academic_staff")
+
+class GradeType(str, Enum):
+    EXAM = "Egzamin"
+    FINAL = "Ocena końcowa"
+    PROJECT = "Projekt"
+    HOMEWORK = "Praca domowa"
+    ACTIVITY = "Aktywność"
+    MIDTERM = "Kolokwium"
+    PRESENTATION = "Prezentacja"
+    LABORATORY = "Laboratorium"
+
+class StudentGrade(SQLModel, table=True):
+    __tablename__ = "student_grade"
+    
+    student_grade_id: Optional[int] = Field(default=None, primary_key=True)
+    student_id: Optional[int] = Field(default=None, foreign_key="student.student_id")
+    academic_course_id: Optional[int] = Field(default=None, foreign_key="academic_course.academic_course_id")
+    grade_value: float = Field(sa_column=Column(Float, nullable=False))
+    grade_date: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+    grade_type: GradeType = Field(sa_column=Column(SAEnum(GradeType)))
+    
+    student: Optional["Student"] = Relationship(back_populates="grades")
+    academic_course: Optional["AcademicCourse"] = Relationship(back_populates="student_grades")
