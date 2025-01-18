@@ -7,6 +7,8 @@ from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from src.services.service_factory import ServiceFactory
 import json
+from clients.gui_kivy.utils.colors import *
+from clients.gui_kivy.utils.dialog_utils import DialogUtils
 
 class StudentView(Screen):
     def __init__(self, **kwargs):
@@ -16,6 +18,17 @@ class StudentView(Screen):
 
         # Główny układ
         self.layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+
+        # Tytuł
+        title_label = Label(
+            text="Lista studentów",
+            font_size='20sp',
+            size_hint_y=None,
+            height=50,
+            halign='center',
+            color=TEXT_WHITE
+        )
+        self.layout.add_widget(title_label)
 
         # Przewijalna lista studentów (na górze)
         self.student_list_container = BoxLayout(orientation='vertical', size_hint_y=None)
@@ -27,13 +40,23 @@ class StudentView(Screen):
         # Przyciski na dole
         bottom_layout = BoxLayout(size_hint_y=None, height=50, spacing=10)
 
-        add_button = Button(text='Add Student', size_hint_y=None, height=50)
-        add_button.bind(on_press=self.add_student)
-        bottom_layout.add_widget(add_button)
-
-        return_button = Button(text='Return to Main Menu', size_hint_y=None, height=50)
+        return_button = Button(
+            text='Powrót do menu',
+            size_hint_y=None,
+            height=50,
+            background_color=BUTTON_ORANGE
+        )
         return_button.bind(on_press=self.return_to_main_menu)
         bottom_layout.add_widget(return_button)
+
+        add_button = Button(
+            text='Dodaj studenta', 
+            size_hint_y=None, 
+            height=50,
+            background_color=BUTTON_GREEN
+        )
+        add_button.bind(on_press=self.add_student)
+        bottom_layout.add_widget(add_button)
 
         self.layout.add_widget(bottom_layout)
 
@@ -50,19 +73,52 @@ class StudentView(Screen):
         self.student_list_container.clear_widgets()
 
         for student in students:
-            student_box = BoxLayout(orientation='horizontal', size_hint_y=None, height=50)
-            student_info = f"{student.first_name} {student.last_name} (Index: {student.index_number})"
-            student_box.add_widget(Label(text=student_info, size_hint_x=0.6))
+            # Główny box dla wiersza ze studentem
+            student_box = BoxLayout(
+                orientation='horizontal', 
+                size_hint_y=None, 
+                height=50,
+                spacing=2  # Odstęp poziomy między elementami
+            )
             
-            edit_btn = Button(text='Edit', size_hint_x=0.2)
+            # Label z danymi studenta
+            student_info = f"{student.first_name} {student.last_name} (Index: {student.index_number})"
+            student_box.add_widget(Label(
+                text=student_info, 
+                size_hint_x=0.6,
+                font_size='18sp',
+                color=TEXT_WHITE
+            ))
+            
+            # Przyciski w osobnym boxlayout dla lepszego rozmieszczenia
+            buttons_box = BoxLayout(
+                size_hint_x=0.4, 
+                spacing=2  # Odstęp poziomy między przyciskami
+            )
+            
+            edit_btn = Button(
+                text='Edytuj',
+                size_hint_x=0.5,
+                background_color=BUTTON_GREEN
+            )
             edit_btn.bind(on_press=lambda instance, student=student: self.edit_student(student))
-            student_box.add_widget(edit_btn)
+            buttons_box.add_widget(edit_btn)
 
-            delete_btn = Button(text='Delete', size_hint_x=0.2)
+            delete_btn = Button(
+                text='Usuń',
+                size_hint_x=0.5,
+                background_color=BUTTON_RED
+            )
             delete_btn.bind(on_press=lambda instance, student=student: self.delete_student(student))
-            student_box.add_widget(delete_btn)
-
-            self.student_list_container.add_widget(student_box)
+            buttons_box.add_widget(delete_btn)
+            
+            student_box.add_widget(buttons_box)
+            
+            # Dodaj odstęp pionowy między wierszami
+            container = BoxLayout(orientation='vertical', size_hint_y=None, height=55)  # 50 + 5 na margines
+            container.add_widget(student_box)
+            
+            self.student_list_container.add_widget(container)
 
     def add_student(self, instance):
         self.manager.current = 'student_form'
@@ -75,29 +131,15 @@ class StudentView(Screen):
         form_screen.load_student(student)
 
     def delete_student(self, student):
-        # Potwierdzenie usunięcia
-        content = BoxLayout(orientation='vertical')
-        content.add_widget(Label(text=f"Czy na pewno chcesz usunąć tego studenta:{student.first_name} {student.last_name}?"))
-
-        button_layout = BoxLayout(size_hint_y=None, height=50)
-        yes_button = Button(text='Yes')
-        no_button = Button(text='No')
-
-        button_layout.add_widget(yes_button)
-        button_layout.add_widget(no_button)
-
-        content.add_widget(button_layout)
-
-        popup = Popup(title='Confirm Delete', content=content, size_hint=(0.6, 0.4))
-        yes_button.bind(on_press=lambda *args: self.confirm_delete_student(student, popup))
-        no_button.bind(on_press=popup.dismiss)
-
-        popup.open()
-
-    def confirm_delete_student(self, student, popup):
+        DialogUtils.show_delete_confirmation(
+            item_type="studenta",
+            item_name=f"{student.first_name} {student.last_name}",
+            on_confirm=lambda: self.confirm_delete_student(student)
+        )
+    
+    def confirm_delete_student(self, student):
         self.service.delete_student(student.index_number)
         self.refresh_student_list()
-        popup.dismiss()
 
     def return_to_main_menu(self, instance):
         self.manager.current = 'menu'

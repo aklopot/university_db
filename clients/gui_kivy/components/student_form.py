@@ -8,6 +8,7 @@ from src.services.service_factory import ServiceFactory
 from src.models.universitydb import Address, Gender, Student, FieldOfStudy
 import json
 from typing import Optional
+from clients.gui_kivy.utils.colors import *
 
 class StudentForm(Screen):
     def __init__(self, **kwargs):
@@ -18,59 +19,171 @@ class StudentForm(Screen):
         self.address_service = ServiceFactory().get_address_service()
         self.field_of_study_service = ServiceFactory().get_field_of_study_service()
         
-        self.layout = BoxLayout(orientation='vertical')
+        self.layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
         
-        # Pola formularza
-        self.first_name_input = TextInput(hint_text="First Name")
-        self.last_name_input = TextInput(hint_text="Last Name")
-        self.index_number_input = TextInput(hint_text="Index Number")
-        self.pesel_input = TextInput(hint_text="PESEL")
+        # Tytuł
+        self.title_label = Label(
+            text="Dodaj studenta",
+            font_size='20sp',
+            size_hint_y=None,
+            height=50,
+            halign='center',
+            color=TEXT_WHITE
+        )
+        self.layout.add_widget(self.title_label)
         
-        # Etykieta wybranej płci
-        self.selected_gender_label = Label(text='No Gender Selected', size_hint_y=None, height=50)
+        # Inicjalizacja pól formularza
+        self.first_name_input = TextInput(
+            hint_text="Wprowadź imię",
+            size_hint_y=None,
+            height=40
+        )
+        self.last_name_input = TextInput(
+            hint_text="Wprowadź nazwisko",
+            size_hint_y=None,
+            height=40
+        )
+        self.index_number_input = TextInput(
+            hint_text="Wprowadź numer indeksu",
+            size_hint_y=None,
+            height=40
+        )
+        self.pesel_input = TextInput(
+            hint_text="Wprowadź PESEL",
+            size_hint_y=None,
+            height=40
+        )
+
+        # Definicja sekcji z etykietami i polami
+        input_sections = [
+            ("Imię:", self.first_name_input),
+            ("Nazwisko:", self.last_name_input),
+            ("Numer indeksu:", self.index_number_input),
+            ("PESEL:", self.pesel_input)
+        ]
+
+        # Dodawanie sekcji z polami tekstowymi
+        for label_text, input_field in input_sections:
+            section = BoxLayout(
+                orientation='vertical',
+                size_hint_y=None,
+                height=70,
+                spacing=5
+            )
+            section.add_widget(Label(
+                text=label_text,
+                size_hint_y=None,
+                height=20,
+                color=TEXT_WHITE,
+                halign='left'
+            ))
+            section.add_widget(input_field)
+            self.layout.add_widget(section)
+
+        # Sekcja wyboru płci (wysokość zwiększona ze względu na potrzebę wyświetlenia wybranej wartości)
+        gender_section = BoxLayout(
+            orientation='vertical',
+            size_hint_y=None,
+            height=90,
+            spacing=5
+        )
+        gender_section.add_widget(Label(
+            text="Płeć:",
+            size_hint_y=None,
+            height=20,
+            color=TEXT_WHITE
+        ))
+        self.selected_gender_label = Label(
+            text='Nie wybrano',
+            size_hint_y=None,
+            height=25,
+            color=TEXT_WHITE
+        )
+        gender_section.add_widget(self.selected_gender_label)
         
-        # Przycisk do wyboru płci
-        self.select_gender_button = Button(text='Select Gender', size_hint_y=None, height=50)
-        self.select_gender_button.bind(on_press=self.open_gender_selection)
+        self.select_gender_button = Button(
+            text='Wybierz płeć',
+            size_hint_y=None,
+            height=40,
+            background_color=BUTTON_LIGHT_BLUE
+        )
+        gender_section.add_widget(self.select_gender_button)
         
-        # Etykieta wybranego adresu
-        self.selected_address_label = Label(text='No Address Selected', size_hint_y=None, height=50)
+        # Sekcja wyboru adresu (podobna wysokość jak płeć)
+        address_section = BoxLayout(
+            orientation='vertical',
+            size_hint_y=None,
+            height=90,
+            spacing=5
+        )
+        address_section.add_widget(Label(
+            text="Adres:",
+            size_hint_y=None,
+            height=20,
+            color=TEXT_WHITE
+        ))
+        self.selected_address_label = Label(
+            text='Nie wybrano',
+            size_hint_y=None,
+            height=25,
+            color=TEXT_WHITE
+        )
+        address_section.add_widget(self.selected_address_label)
         
-        # Przycisk do wyboru adresu
-        self.select_address_button = Button(text='Select Address', size_hint_y=None, height=50)
+        self.select_address_button = Button(
+            text='Wybierz adres',
+            size_hint_y=None,
+            height=40,
+            background_color=BUTTON_GREEN
+        )
         self.select_address_button.bind(on_press=self.open_address_selection)
+        address_section.add_widget(self.select_address_button)
         
-        # Dodaj Spinner (lista rozwijana) dla kierunku studiów
+        # Sekcja wyboru kierunku studiów (mniejsza wysokość - tylko spinner)
+        field_study_section = BoxLayout(
+            orientation='vertical',
+            size_hint_y=None,
+            height=70,
+            spacing=5
+        )
+        field_study_section.add_widget(Label(
+            text="Kierunek studiów:",
+            size_hint_y=None,
+            height=20,
+            color=TEXT_WHITE
+        ))
         self.field_of_study_spinner = Spinner(
-            text='Select Field of Study',
+            text='Wybierz kierunek',
             values=self._get_field_of_study_names(),
             size_hint_y=None,
-            height=50
+            height=40,
+            background_color=BUTTON_LIGHT_BLUE
         )
+        field_study_section.add_widget(self.field_of_study_spinner)
         
-        self.layout.add_widget(self.first_name_input)
-        self.layout.add_widget(self.last_name_input)
-        self.layout.add_widget(self.index_number_input)
-        self.layout.add_widget(self.pesel_input)
-        self.layout.add_widget(self.selected_gender_label)
-        self.layout.add_widget(self.select_gender_button)
-        self.layout.add_widget(self.selected_address_label)
-        self.layout.add_widget(self.select_address_button)
-        self.layout.add_widget(self.field_of_study_spinner)
+        # Dodawanie wszystkich elementów do głównego layoutu
+        self.layout.add_widget(gender_section)
+        self.layout.add_widget(address_section)
+        self.layout.add_widget(field_study_section)
         
-        # Przyciski
-        button_layout = BoxLayout(size_hint_y=None, height=50)
+        # Przyciski akcji
+        button_layout = BoxLayout(size_hint_y=None, height=50, spacing=10)
         
-        save_button = Button(text="Save")
+        save_button = Button(
+            text='Zapisz',
+            background_color=BUTTON_GREEN
+        )
         save_button.bind(on_press=self.save_student)
         button_layout.add_widget(save_button)
         
-        cancel_button = Button(text="Cancel")
+        cancel_button = Button(
+            text='Anuluj',
+            background_color=BUTTON_ORANGE
+        )
         cancel_button.bind(on_press=self.cancel)
         button_layout.add_widget(cancel_button)
         
         self.layout.add_widget(button_layout)
-        
         self.add_widget(self.layout)
         
         # Aktualny student (do edycji)
@@ -79,19 +192,33 @@ class StudentForm(Screen):
         self.selected_gender = None   # Przechowuje wybraną płeć
         self.selected_field_of_study = None
         
+        # Aktualizacja kolorów dla etykiet
+        self.selected_gender_label.color = TEXT_WHITE
+        self.selected_address_label.color = TEXT_WHITE
+
+        # Aktualizacja kolorów dla przycisków wyboru
+        self.select_gender_button.background_color = BUTTON_LIGHT_BLUE
+        self.select_address_button.background_color = BUTTON_LIGHT_BLUE
+        
+        # Aktualizacja koloru dla spinnera
+        self.field_of_study_spinner.background_color = BUTTON_LIGHT_BLUE
+        
     def _get_field_of_study_names(self) -> list[str]:
         fields = self.field_of_study_service.get_all_fields_of_study()
         return [field.field_name for field in fields]
         
     def clear_form(self):
+        # Ustaw tytuł dla nowego studenta
+        self.title_label.text = "Dodaj studenta"
+        
         # Czyści pola formularza
         self.first_name_input.text = ''
         self.last_name_input.text = ''
         self.index_number_input.text = ''
         self.pesel_input.text = ''
-        self.selected_gender_label.text = 'No Gender Selected'
-        self.selected_address_label.text = 'No Address Selected'
-        self.field_of_study_spinner.text = 'Select Field of Study'
+        self.selected_gender_label.text = 'Nie wybrano'
+        self.selected_address_label.text = 'Nie wybrano'
+        self.field_of_study_spinner.text = 'Wybierz kierunek'
         
         self.current_student = None
         self.selected_address = None
@@ -99,6 +226,9 @@ class StudentForm(Screen):
         self.selected_field_of_study = None
         
     def load_student(self, student):
+        # Zmień tytuł na tryb edycji
+        self.title_label.text = "Edytuj studenta"
+        
         # Ładuje dane studenta do formularza (edycja)
         self.current_student = student
         self.first_name_input.text = student.first_name
@@ -120,7 +250,7 @@ class StudentForm(Screen):
             self.field_of_study_spinner.text = student.field_of_study.field_name
             
     def _get_selected_field_of_study(self) -> Optional[FieldOfStudy]:
-        if self.field_of_study_spinner.text != 'Select Field of Study':
+        if self.field_of_study_spinner.text != 'Wybierz kierunek':
             return self.field_of_study_service.get_field_of_study_by_name(
                 self.field_of_study_spinner.text
             )
