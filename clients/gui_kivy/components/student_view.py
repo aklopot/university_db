@@ -93,28 +93,36 @@ class StudentView(Screen):
             
             buttons_box = BoxLayout(
                 size_hint_x=0.4,
+                spacing=6
+            )
+            
+            # Kontener dla przycisków Edytuj i Usuń
+            edit_delete_box = BoxLayout(
+                size_hint_x=0.66,  # 2/3 szerokości
                 spacing=2
             )
             
             edit_btn = Button(
                 text='Edytuj',
-                size_hint_x=0.33,
+                size_hint_x=0.5,
                 background_color=BUTTON_GREEN
             )
             edit_btn.bind(on_press=lambda instance, student=student: self.edit_student(student))
-            buttons_box.add_widget(edit_btn)
+            edit_delete_box.add_widget(edit_btn)
 
             delete_btn = Button(
                 text='Usuń',
-                size_hint_x=0.33,
+                size_hint_x=0.5,
                 background_color=BUTTON_RED
             )
             delete_btn.bind(on_press=lambda instance, student=student: self.delete_student(student))
-            buttons_box.add_widget(delete_btn)
+            edit_delete_box.add_widget(delete_btn)
+            
+            buttons_box.add_widget(edit_delete_box)
 
             grades_btn = Button(
                 text='Oceny',
-                size_hint_x=0.33,
+                size_hint_x=0.33,  # 1/3 szerokości
                 background_color=BUTTON_BEIGE
             )
             grades_btn.bind(on_press=lambda instance, student=student: self.show_student_grades(student))
