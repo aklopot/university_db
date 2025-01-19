@@ -1,6 +1,6 @@
 from typing import List
 from sqlmodel import SQLModel, Session, select, create_engine
-from src.models.universitydb import StudentGrade
+from src.models.universitydb import StudentGrade, Student
 from src.repositories.base_repositories.base_student_grade_repository import BaseStudentGradeRepository
 from sqlalchemy.orm import joinedload
 
@@ -33,6 +33,16 @@ class SQLiteStudentGradeRepository(BaseStudentGradeRepository):
                 joinedload(StudentGrade.student)
             )
             return list(session.exec(statement))
+
+    def get_student_grade_by_id(self, grade_id: int) -> StudentGrade:
+        with Session(self.engine) as session:
+            statement = select(StudentGrade).where(
+                StudentGrade.student_grade_id == grade_id
+            ).options(
+                joinedload(StudentGrade.academic_course),
+                joinedload(StudentGrade.student).joinedload(Student.field_of_study)
+            )
+            return session.exec(statement).first()
 
     def delete_student_grade_by_id(self, grade_id: int) -> None:
         with Session(self.engine) as session:

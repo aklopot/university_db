@@ -6,6 +6,18 @@ class StudentGradeService:
     def __init__(self):
         self.repository = RepositoryFactory().get_student_grade_repository()
 
+    def get_student_grades(self, student_id: int) -> List[StudentGrade]:
+        """
+        Pobiera wszystkie oceny danego studenta.
+        """
+        return self.repository.get_student_grades(student_id)
+
+    def get_grade(self, grade_id: int) -> StudentGrade:
+        """
+        Pobiera pojedynczą ocenę studenta.
+        """
+        return self.repository.get_student_grade_by_id(grade_id)
+
     def add_student_grade(self, grade: StudentGrade) -> None:
         """
         Dodaje nową ocenę studenta.
@@ -17,12 +29,6 @@ class StudentGradeService:
         Aktualizuje ocenę studenta.
         """
         self.repository.update_student_grade(grade)
-
-    def get_student_grades(self, student_id: int) -> List[StudentGrade]:
-        """
-        Pobiera wszystkie oceny danego studenta.
-        """
-        return self.repository.get_student_grades(student_id)
 
     def delete_student_grade(self, grade_id: int) -> None:
         """
