@@ -44,7 +44,7 @@ class StudentView(Screen):
             text='Powrót do menu',
             size_hint_y=None,
             height=50,
-            background_color=BUTTON_ORANGE
+            background_color=BUTTON_PEARL
         )
         return_button.bind(on_press=self.return_to_main_menu)
         bottom_layout.add_widget(return_button)
@@ -109,7 +109,7 @@ class StudentView(Screen):
             grades_btn = Button(
                 text='Oceny',
                 size_hint_x=0.33,
-                background_color=BUTTON_LIGHT_BLUE
+                background_color=BUTTON_BEIGE
             )
             grades_btn.bind(on_press=lambda instance, student=student: self.show_student_grades(student))
             buttons_box.add_widget(grades_btn)

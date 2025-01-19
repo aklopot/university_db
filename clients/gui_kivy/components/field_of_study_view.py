@@ -41,7 +41,7 @@ class FieldOfStudyView(Screen):
             text='Powrót do menu',
             size_hint_y=None,
             height=50,
-            background_color=BUTTON_ORANGE
+            background_color=BUTTON_PEARL
         )
         return_button.bind(on_press=self.return_to_main_menu)
         bottom_layout.add_widget(return_button)

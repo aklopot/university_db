@@ -44,7 +44,7 @@ class AcademicCourseView(Screen):
             text='Powrót do menu',
             size_hint_y=None,
             height=50,
-            background_color=BUTTON_ORANGE
+            background_color=BUTTON_PEARL
         )
         back_button.bind(on_press=lambda x: self.go_back_to_menu())
         self.bottom_layout.add_widget(back_button)

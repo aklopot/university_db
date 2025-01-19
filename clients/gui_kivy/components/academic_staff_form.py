@@ -155,7 +155,7 @@ class AcademicStaffForm(Screen):
         
         cancel_button = Button(
             text='Anuluj',
-            background_color=BUTTON_ORANGE
+            background_color=BUTTON_PEARL
         )
         cancel_button.bind(on_press=self.cancel)
         button_layout.add_widget(cancel_button)

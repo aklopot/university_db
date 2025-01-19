@@ -43,7 +43,7 @@ class AcademicStaffView(Screen):
             text='Powrót do menu',
             size_hint_y=None,
             height=50,
-            background_color=BUTTON_ORANGE
+            background_color=BUTTON_PEARL
         )
         return_button.bind(on_press=self.return_to_main_menu)
         bottom_layout.add_widget(return_button)
@@ -63,57 +63,64 @@ class AcademicStaffView(Screen):
         self.bind(on_pre_enter=lambda instance: self.refresh_academic_staff_list())
     
     def refresh_academic_staff_list(self):
-        academic_staff_list = self.service.get_all_academic_staff()
-        
-        # Wyczyść listę
-        self.academic_staff_list_container.clear_widgets()
-        
-        for academic_staff in academic_staff_list:
-            # Główny box dla wiersza z pracownikiem
-            academic_staff_box = BoxLayout(
-                orientation='horizontal', 
-                size_hint_y=None, 
-                height=50,
-                spacing=2  # Odstęp poziomy między elementami
-            )
+        try:
+            academic_staff_list = self.service.get_all_academic_staff()
+            self.academic_staff_list_container.clear_widgets()
+            print(f"Odświeżam listę pracowników, znaleziono: {len(academic_staff_list)}")  # Debug log
             
-            # Label z danymi pracownika
-            academic_staff_box.add_widget(Label(
-                text=f"{academic_staff.first_name} {academic_staff.last_name}",
-                size_hint_x=0.6,
-                font_size='18sp',
-                color=TEXT_WHITE
-            ))
-            
-            # Przyciski w osobnym boxlayout dla lepszego rozmieszczenia
-            buttons_box = BoxLayout(
-                size_hint_x=0.4, 
-                spacing=2  # Odstęp poziomy między przyciskami
-            )
-            
-            edit_btn = Button(
-                text='Edytuj',
-                size_hint_x=0.5,  # Zmienione z 0.2 na 0.5 bo teraz jest w osobnym boxlayout
-                background_color=BUTTON_GREEN
-            )
-            edit_btn.bind(on_press=lambda instance, staff=academic_staff: self.edit_academic_staff(staff))
-            buttons_box.add_widget(edit_btn)
-            
-            delete_btn = Button(
-                text='Usuń',
-                size_hint_x=0.5,  # Zmienione z 0.2 na 0.5 bo teraz jest w osobnym boxlayout
-                background_color=BUTTON_RED
-            )
-            delete_btn.bind(on_press=lambda instance, staff=academic_staff: self.confirm_delete_academic_staff(staff))
-            buttons_box.add_widget(delete_btn)
-            
-            academic_staff_box.add_widget(buttons_box)
-            
-            # Dodaj odstęp pionowy między wierszami
-            container = BoxLayout(orientation='vertical', size_hint_y=None, height=55)  # 50 + 5 na margines
-            container.add_widget(academic_staff_box)
-            
-            self.academic_staff_list_container.add_widget(container)
+            for academic_staff in academic_staff_list:
+                # Główny box dla wiersza z pracownikiem
+                academic_staff_box = BoxLayout(
+                    orientation='horizontal', 
+                    size_hint_y=None, 
+                    height=50,
+                    spacing=2
+                )
+                
+                # Label z danymi pracownika
+                academic_staff_box.add_widget(Label(
+                    text=f"{academic_staff.first_name} {academic_staff.last_name}",
+                    size_hint_x=0.6,
+                    font_size='18sp',
+                    color=TEXT_WHITE
+                ))
+                
+                # Przyciski w osobnym boxlayout
+                buttons_box = BoxLayout(
+                    size_hint_x=0.4, 
+                    spacing=2
+                )
+                
+                # Ważne: tworzymy osobną funkcję dla każdego przycisku, aby uniknąć problemu z domknięciami
+                def create_edit_callback(staff):
+                    return lambda instance: self.edit_academic_staff(staff)
+                    
+                def create_delete_callback(staff):
+                    return lambda instance: self.confirm_delete_academic_staff(staff)
+                
+                edit_btn = Button(
+                    text='Edytuj',
+                    size_hint_x=0.5,
+                    background_color=BUTTON_GREEN
+                )
+                edit_btn.bind(on_press=create_edit_callback(academic_staff))
+                buttons_box.add_widget(edit_btn)
+                
+                delete_btn = Button(
+                    text='Usuń',
+                    size_hint_x=0.5,
+                    background_color=BUTTON_RED
+                )
+                delete_btn.bind(on_press=create_delete_callback(academic_staff))
+                buttons_box.add_widget(delete_btn)
+                
+                academic_staff_box.add_widget(buttons_box)
+                
+                container = BoxLayout(orientation='vertical', size_hint_y=None, height=55)
+                container.add_widget(academic_staff_box)
+                self.academic_staff_list_container.add_widget(container)
+        except Exception as e:
+            print(f"Błąd podczas odświeżania listy pracowników: {e}")
     
     def add_academic_staff(self, instance):
         self.manager.current = 'academic_staff_form'
@@ -126,15 +133,20 @@ class AcademicStaffView(Screen):
         form_screen.load_academic_staff(academic_staff)
     
     def confirm_delete_academic_staff(self, academic_staff):
+        def delete_callback():
+            try:
+                print(f"Rozpoczynam usuwanie pracownika o ID: {academic_staff.academic_staff_id}")  # Debug log
+                self.service.delete_academic_staff(academic_staff.academic_staff_id)
+                print("Pracownik został usunięty, odświeżam listę")  # Debug log
+                self.refresh_academic_staff_list()
+            except Exception as e:
+                print(f"Błąd podczas usuwania pracownika: {e}")
+
         DialogUtils.show_delete_confirmation(
             item_type="pracownika",
             item_name=f"{academic_staff.first_name} {academic_staff.last_name}",
-            on_confirm=lambda: self.delete_academic_staff(academic_staff)
+            on_confirm=delete_callback
         )
-    
-    def delete_academic_staff(self, academic_staff):
-        self.service.delete_academic_staff(academic_staff.pesel)
-        self.refresh_academic_staff_list()
     
     def return_to_main_menu(self, instance):
         self.manager.current = 'menu'

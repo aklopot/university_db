@@ -42,14 +42,14 @@ class MenuScreen(Screen):
         
         student_button = Button(
             text='Zarządzaj studentami',
-            background_color=BUTTON_GREEN
+            background_color=BUTTON_BEIGE
         )
         student_button.bind(on_press=lambda x: self.go_to_view('student_view'))
         first_row.add_widget(student_button)
 
         academic_staff_button = Button(
             text='Zarządzaj pracownikami',
-            background_color=BUTTON_GREEN
+            background_color=BUTTON_BEIGE
         )
         academic_staff_button.bind(on_press=lambda x: self.go_to_view('academic_staff_view'))
         first_row.add_widget(academic_staff_button)
@@ -61,14 +61,14 @@ class MenuScreen(Screen):
         
         academic_course_button = Button(
             text='Zarządzaj kursami akademickimi',
-            background_color=BUTTON_GREEN
+            background_color=BUTTON_BEIGE
         )
         academic_course_button.bind(on_press=lambda x: self.go_to_view('academic_course_view'))
         second_row.add_widget(academic_course_button)
 
         field_of_study_button = Button(
             text='Zarządzaj kierunkami studiów',
-            background_color=BUTTON_GREEN
+            background_color=BUTTON_BEIGE
         )
         field_of_study_button.bind(on_press=lambda x: self.go_to_view('field_of_study_view'))
         second_row.add_widget(field_of_study_button)

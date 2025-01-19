@@ -46,3 +46,18 @@ class SQLiteAcademicStaffRepository(BaseAcademicStaffRepository):
                 existing_academic_staff.gender_id = academic_staff.gender_id
                 existing_academic_staff.position = academic_staff.position
                 session.commit()
+
+    def delete_academic_staff_by_id(self, academic_staff_id: int) -> None:
+        try:
+            with Session(self.engine) as session:
+                academic_staff = session.get(AcademicStaff, academic_staff_id)
+                if academic_staff:
+                    print(f"Znaleziono pracownika do usunięcia: {academic_staff.academic_staff_id}")  # Debug log
+                    session.delete(academic_staff)
+                    session.commit()
+                    print("Pracownik został usunięty")  # Debug log
+                else:
+                    print(f"Nie znaleziono pracownika o ID: {academic_staff_id}")  # Debug log
+        except Exception as e:
+            print(f"Błąd w repozytorium podczas usuwania pracownika: {e}")
+            raise

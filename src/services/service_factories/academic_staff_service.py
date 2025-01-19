@@ -10,8 +10,8 @@ class AcademicStaffService(BasePersonService[AcademicStaff]):
     Serwis odpowiedzialny za operacje na pracownikach akademickich.
     """
     def __init__(self):
-        repository = RepositoryFactory().get_academic_staff_repository()
-        super().__init__(AcademicStaffValidator(), repository)
+        self.repository = RepositoryFactory().get_academic_staff_repository()
+        super().__init__(AcademicStaffValidator(), self.repository)
 
     def add_academic_staff(self, academic_staff: AcademicStaff) -> None:
         """
@@ -31,8 +31,13 @@ class AcademicStaffService(BasePersonService[AcademicStaff]):
         """
         return self.get_all()
 
-    def delete_academic_staff(self, pesel: str) -> None:
+    def delete_academic_staff(self, academic_staff_id: int) -> None:
         """
-        Usuwa pracownika akademickiego o podanym numerze PESEL.
+        Usuwa pracownika akademickiego.
         """
-        self.delete_by_id(pesel)
+        try:
+            print(f"Próba usunięcia pracownika o ID: {academic_staff_id}")  # Debug log
+            self.repository.delete_academic_staff_by_id(academic_staff_id)
+        except Exception as e:
+            print(f"Błąd w serwisie podczas usuwania pracownika: {e}")
+            raise

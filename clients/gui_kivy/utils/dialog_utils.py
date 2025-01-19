@@ -34,7 +34,7 @@ class DialogUtils:
         
         no_button = Button(
             text="Nie",
-            background_color=BUTTON_ORANGE
+            background_color=BUTTON_PEARL
         )
         no_button.bind(on_press=exit_popup.dismiss)
         button_layout.add_widget(no_button)
@@ -85,7 +85,7 @@ class DialogUtils:
         
         no_button = Button(
             text="Nie",
-            background_color=BUTTON_ORANGE
+            background_color=BUTTON_PEARL
         )
         no_button.bind(on_press=popup.dismiss)
         button_layout.add_widget(no_button)

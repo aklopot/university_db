@@ -1,74 +1,159 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.scrollview import ScrollView
-from kivy.uix.label import Label
 from kivy.uix.button import Button
-from kivy.uix.popup import Popup
+from kivy.uix.label import Label
+from kivy.uix.scrollview import ScrollView
+from kivy.uix.widget import Widget
 from src.services.service_factory import ServiceFactory
-import json
+from clients.gui_kivy.utils.colors import *
 
 class AddressSelectionScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.service = ServiceFactory().get_address_service()
         
-        self.address_service = ServiceFactory().get_address_service()
+        layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
         
-        # Główny układ
-        self.layout = BoxLayout(orientation='vertical')
+        # Tytuł
+        title_label = Label(
+            text="Wybór adresu",
+            font_size='24sp',
+            size_hint_y=None,
+            height=50,
+            halign='center',
+            color=TEXT_WHITE
+        )
+        layout.add_widget(title_label)
         
-        # Przewijalna lista adresów
-        self.address_list_container = BoxLayout(orientation='vertical', size_hint_y=None)
+        # Odstęp po tytule
+        layout.add_widget(Widget(size_hint_y=None, height=20))
+
+        # Kontener na listę adresów
+        self.address_list_container = BoxLayout(
+            orientation='vertical',
+            size_hint_y=None,
+            spacing=5  # Odstęp między adresami
+        )
         self.address_list_container.bind(minimum_height=self.address_list_container.setter('height'))
-        self.address_list_scroll = ScrollView()
-        self.address_list_scroll.add_widget(self.address_list_container)
-        self.layout.add_widget(self.address_list_scroll)
+        
+        # ScrollView dla listy adresów
+        scroll_view = ScrollView(size_hint=(1, 1))
+        scroll_view.add_widget(self.address_list_container)
+        layout.add_widget(scroll_view)
         
         # Przyciski na dole
-        bottom_layout = BoxLayout(size_hint_y=None, height=50)
+        button_layout = BoxLayout(
+            size_hint_y=None, 
+            height=50, 
+            spacing=10,
+            padding=[0, 10, 0, 0]  # Dodatkowy odstęp od góry
+        )
         
-        add_button = Button(text='Add Address')
+        # Przycisk powrotu
+        return_button = Button(
+            text='Powrót',
+            size_hint_x=0.5,
+            background_color=BUTTON_PEARL
+        )
+        return_button.bind(on_press=self.return_to_previous)
+        button_layout.add_widget(return_button)
+        
+        # Przycisk dodawania
+        add_button = Button(
+            text='Dodaj nowy adres',
+            size_hint_x=0.5,
+            background_color=BUTTON_GREEN
+        )
         add_button.bind(on_press=self.open_add_address_form)
-        bottom_layout.add_widget(add_button)
+        button_layout.add_widget(add_button)
         
-        cancel_button = Button(text='Cancel')
-        cancel_button.bind(on_press=self.cancel)
-        bottom_layout.add_widget(cancel_button)
+        layout.add_widget(button_layout)
+        self.add_widget(layout)
         
-        self.layout.add_widget(bottom_layout)
-        
-        self.add_widget(self.layout)
-        
+        # Dodajemy te pola, które są potrzebne do działania ekranu
         self.previous_screen = None  # Nazwa poprzedniego ekranu
-        self.parent_form = None  # Referencja do formularza, który otworzył ten ekran
-    
-    def on_pre_enter(self):
-        # Odśwież listę adresów za każdym razem, gdy wchodzimy na ekran
-        self.refresh_address_list()
-    
-    def refresh_address_list(self):
-        addresses = self.address_service.get_all_addresses()
+        self.parent_form = None      # Referencja do formularza, który otworzył ten ekran
         
-        # Wyczyść listę
+    def on_pre_enter(self):
+        """
+        Metoda wywoływana przed wejściem na ekran.
+        Odświeża listę adresów.
+        """
+        self.refresh_address_list()
+        
+    def refresh_address_list(self):
+        addresses = self.service.get_all_addresses()
         self.address_list_container.clear_widgets()
         
+        # Dodaj odstęp na górze listy
+        self.address_list_container.add_widget(Widget(size_hint_y=None, height=10))
+        
         for address in addresses:
-            address_box = BoxLayout(orientation='horizontal', size_hint_y=None, height=50)
-            address_info = f"{address.street}, {address.city}, {address.country}"
-            address_box.add_widget(Label(text=address_info, size_hint_x=0.6))
+            # Kontener dla pojedynczego adresu
+            address_box = BoxLayout(
+                orientation='horizontal',
+                size_hint_y=None,
+                height=50,
+                spacing=2  # Zmniejszony odstęp między elementami w wierszu
+            )
             
-            select_btn = Button(text='Select', size_hint_x=0.2)
-            select_btn.bind(on_press=lambda instance, address=address: self.select_address(address))
-            address_box.add_widget(select_btn)
+            # Label z danymi adresu
+            address_info = f"{address.street}, {address.city}"
+            address_label = Label(
+                text=address_info,
+                size_hint_x=0.6,
+                halign='left',
+                valign='middle',
+                color=TEXT_WHITE,
+                text_size=(None, 50)  # Ustawienie wysokości tekstu
+            )
+            address_box.add_widget(address_label)
             
-            edit_btn = Button(text='Edit', size_hint_x=0.2)
-            edit_btn.bind(on_press=lambda instance, address=address: self.edit_address(address))
-            address_box.add_widget(edit_btn)
+            # Kontener na przyciski
+            buttons_box = BoxLayout(
+                size_hint_x=0.4,
+                spacing=2  # Zmniejszony odstęp między przyciskami
+            )
             
-            delete_btn = Button(text='Delete', size_hint_x=0.2)
-            delete_btn.bind(on_press=lambda instance, address=address: self.delete_address(address))
-            address_box.add_widget(delete_btn)
+            # Przycisk wyboru
+            select_btn = Button(
+                text='Wybierz',
+                size_hint_x=0.33,
+                background_color=BUTTON_LIGHT_BLUE
+            )
+            select_btn.bind(on_press=lambda x, addr=address: self.select_address(addr))
+            buttons_box.add_widget(select_btn)
             
-            self.address_list_container.add_widget(address_box)
+            # Przycisk edycji
+            edit_btn = Button(
+                text='Edytuj',
+                size_hint_x=0.33,
+                background_color=BUTTON_GREEN
+            )
+            edit_btn.bind(on_press=lambda x, addr=address: self.open_edit_address_form(addr))
+            buttons_box.add_widget(edit_btn)
+            
+            # Przycisk usuwania
+            delete_btn = Button(
+                text='Usuń',
+                size_hint_x=0.33,
+                background_color=BUTTON_RED
+            )
+            delete_btn.bind(on_press=lambda x, addr=address: self.delete_address(addr))
+            buttons_box.add_widget(delete_btn)
+            
+            address_box.add_widget(buttons_box)
+            
+            # Kontener z odstępami
+            container = BoxLayout(
+                orientation='vertical', 
+                size_hint_y=None, 
+                height=55,  # 50 na wiersz + 5 na odstęp
+                padding=[0, 0, 0, 5]  # Dolny padding 5
+            )
+            container.add_widget(address_box)
+            
+            self.address_list_container.add_widget(container)
     
     def select_address(self, address):
         # Ustaw wybrany adres w formularzu rodzica
@@ -84,7 +169,7 @@ class AddressSelectionScreen(Screen):
         form_screen.clear_form()
         form_screen.previous_screen = 'address_selection'
     
-    def edit_address(self, address):
+    def open_edit_address_form(self, address):
         # Przejdź do ekranu edycji adresu
         self.manager.current = 'address_form'
         form_screen = self.manager.get_screen('address_form')
@@ -112,10 +197,10 @@ class AddressSelectionScreen(Screen):
         popup.open()
     
     def confirm_delete_address(self, address, popup):
-        self.address_service.delete_address(address.address_id)
+        self.service.delete_address(address.address_id)
         self.refresh_address_list()
         popup.dismiss()
     
-    def cancel(self, instance):
+    def return_to_previous(self, instance):
         # Wróć do poprzedniego ekranu
         self.manager.current = self.previous_screen
