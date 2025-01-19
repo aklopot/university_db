@@ -106,19 +106,19 @@ class AcademicCourseForm(Screen):
         # Przyciski
         button_layout = BoxLayout(size_hint_y=None, height=50, spacing=10)
         
-        save_button = Button(
-            text='Zapisz',
-            background_color=BUTTON_GREEN
-        )
-        save_button.bind(on_press=self.save)
-        button_layout.add_widget(save_button)
-        
         cancel_button = Button(
             text='Anuluj',
             background_color=BUTTON_ORANGE
         )
         cancel_button.bind(on_press=self.cancel)
         button_layout.add_widget(cancel_button)
+
+        save_button = Button(
+            text='Zapisz',
+            background_color=BUTTON_GREEN
+        )
+        save_button.bind(on_press=self.save)
+        button_layout.add_widget(save_button)
         
         self.layout.add_widget(button_layout)
         self.add_widget(self.layout)

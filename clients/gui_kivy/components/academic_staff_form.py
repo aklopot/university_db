@@ -6,6 +6,7 @@ from kivy.uix.label import Label
 from kivy.uix.spinner import Spinner  # Import Spinner dla listy rozwijanej
 from src.services.service_factory import ServiceFactory
 from src.models.universitydb import Address, Gender, AcademicStaff, AcademicPosition
+from clients.gui_kivy.utils.colors import *  # Dodajemy import kolorów
 import json
 
 class AcademicStaffForm(Screen):
@@ -16,61 +17,163 @@ class AcademicStaffForm(Screen):
         self.gender_service = ServiceFactory().get_gender_service()
         self.address_service = ServiceFactory().get_address_service()
         
-        self.layout = BoxLayout(orientation='vertical')
+        self.layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
         
-        # Pola formularza
-        self.first_name_input = TextInput(hint_text="First Name")
-        self.last_name_input = TextInput(hint_text="Last Name")
-        self.pesel_input = TextInput(hint_text="PESEL")
+        # Sekcje formularza z polami tekstowymi
+        input_sections = [
+            ("Imię:", TextInput(
+                hint_text="Wprowadź imię",
+                multiline=False,
+                size_hint_y=None,
+                height=40
+            )),
+            ("Nazwisko:", TextInput(
+                hint_text="Wprowadź nazwisko",
+                multiline=False,
+                size_hint_y=None,
+                height=40
+            )),
+            ("PESEL:", TextInput(
+                hint_text="Wprowadź PESEL",
+                multiline=False,
+                size_hint_y=None,
+                height=40
+            ))
+        ]
         
-        # Spinner do wyboru stanowiska (AcademicPosition)
+        # Przypisanie pól do zmiennych instancji
+        self.first_name_input = input_sections[0][1]
+        self.last_name_input = input_sections[1][1]
+        self.pesel_input = input_sections[2][1]
+        
+        # Dodawanie sekcji z polami tekstowymi
+        for label_text, input_field in input_sections:
+            section = BoxLayout(
+                orientation='vertical',
+                size_hint_y=None,
+                height=70,
+                spacing=5
+            )
+            section.add_widget(Label(
+                text=label_text,
+                size_hint_y=None,
+                height=20,
+                color=TEXT_WHITE
+            ))
+            section.add_widget(input_field)
+            self.layout.add_widget(section)
+        
+        # Sekcja wyboru stanowiska
+        position_section = BoxLayout(
+            orientation='vertical',
+            size_hint_y=None,
+            height=70,
+            spacing=5
+        )
+        position_section.add_widget(Label(
+            text="Stanowisko:",
+            size_hint_y=None,
+            height=20,
+            color=TEXT_WHITE
+        ))
         self.position_spinner = Spinner(
-            text='Select Position',
+            text='Wybierz stanowisko',
             values=[position.value for position in AcademicPosition],
             size_hint_y=None,
-            height=50
+            height=40,
+            background_color=BUTTON_LIGHT_BLUE
+        )
+        position_section.add_widget(self.position_spinner)
+        self.layout.add_widget(position_section)
+        
+        # Sekcja wyboru płci
+        gender_section = BoxLayout(
+            orientation='vertical',
+            size_hint_y=None,
+            height=90,
+            spacing=5
+        )
+        gender_section.add_widget(Label(
+            text="Płeć:",
+            size_hint_y=None,
+            height=20,
+            color=TEXT_WHITE
+        ))
+        self.selected_gender_label = Label(
+            text='Nie wybrano płci',
+            size_hint_y=None,
+            height=25,
+            color=TEXT_WHITE
+        )
+        self.select_gender_button = Button(
+            text='Wybierz płeć',
+            size_hint_y=None,
+            height=40,
+            background_color=BUTTON_LIGHT_BLUE
+        )
+        self.select_gender_button.bind(on_press=self.open_gender_selection)
+        gender_section.add_widget(self.selected_gender_label)
+        gender_section.add_widget(self.select_gender_button)
+        self.layout.add_widget(gender_section)
+        
+        # Sekcja wyboru adresu
+        address_section = BoxLayout(
+            orientation='vertical',
+            size_hint_y=None,
+            height=90,
+            spacing=5
+        )
+        address_section.add_widget(Label(
+            text="Adres:",
+            size_hint_y=None,
+            height=20,
+            color=TEXT_WHITE
+        ))
+        self.selected_address_label = Label(
+            text='Nie wybrano adresu',
+            size_hint_y=None,
+            height=25,
+            color=TEXT_WHITE
+        )
+        self.select_address_button = Button(
+            text='Wybierz adres',
+            size_hint_y=None,
+            height=40,
+            background_color=BUTTON_LIGHT_BLUE
+        )
+        self.select_address_button.bind(on_press=self.open_address_selection)
+        address_section.add_widget(self.selected_address_label)
+        address_section.add_widget(self.select_address_button)
+        self.layout.add_widget(address_section)
+        
+        # Przyciski na dole
+        button_layout = BoxLayout(
+            size_hint_y=None,
+            height=50,
+            spacing=10
         )
         
-        # Etykieta wybranej płci
-        self.selected_gender_label = Label(text='No Gender Selected', size_hint_y=None, height=50)
-        # Przycisk do wyboru płci
-        self.select_gender_button = Button(text='Select Gender', size_hint_y=None, height=50)
-        self.select_gender_button.bind(on_press=self.open_gender_selection)
-        
-        # Etykieta wybranego adresu
-        self.selected_address_label = Label(text='No Address Selected', size_hint_y=None, height=50)
-        # Przycisk do wyboru adresu
-        self.select_address_button = Button(text='Select Address', size_hint_y=None, height=50)
-        self.select_address_button.bind(on_press=self.open_address_selection)
-        
-        self.layout.add_widget(self.first_name_input)
-        self.layout.add_widget(self.last_name_input)
-        self.layout.add_widget(self.pesel_input)
-        self.layout.add_widget(self.position_spinner)  # Dodanie spinnera do layoutu
-        self.layout.add_widget(self.selected_gender_label)
-        self.layout.add_widget(self.select_gender_button)
-        self.layout.add_widget(self.selected_address_label)
-        self.layout.add_widget(self.select_address_button)
-        
-        # Przyciski
-        button_layout = BoxLayout(size_hint_y=None, height=50)
-        
-        save_button = Button(text="Save")
-        save_button.bind(on_press=self.save_academic_staff)
-        button_layout.add_widget(save_button)
-        
-        cancel_button = Button(text="Cancel")
+        cancel_button = Button(
+            text='Anuluj',
+            background_color=BUTTON_ORANGE
+        )
         cancel_button.bind(on_press=self.cancel)
         button_layout.add_widget(cancel_button)
         
-        self.layout.add_widget(button_layout)
+        save_button = Button(
+            text='Zapisz',
+            background_color=BUTTON_GREEN
+        )
+        save_button.bind(on_press=self.save_academic_staff)
+        button_layout.add_widget(save_button)
         
+        self.layout.add_widget(button_layout)
         self.add_widget(self.layout)
         
-        # Aktualny pracownik akademicki (do edycji)
+        # Zmienne stanu
         self.current_academic_staff = None
-        self.selected_address = None  # Przechowuje wybrany adres
-        self.selected_gender = None   # Przechowuje wybraną płeć
+        self.selected_address = None
+        self.selected_gender = None
         
     def clear_form(self):
         # Czyści pola formularza
