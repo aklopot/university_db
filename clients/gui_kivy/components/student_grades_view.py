@@ -63,8 +63,13 @@ class StudentGradesView(Screen):
         self.current_student = None
         
     def load_student_grades(self, student):
+        """Ładuje oceny dla wybranego studenta"""
         self.current_student = student
-        self.title_label.text = f"Oceny studenta: {student.first_name} {student.last_name}"
+        
+        # Aktualizuj tytuł z informacją o studencie i jego kierunku
+        self.title_label.text = f"Oceny studenta: {student.first_name} {student.last_name} ({student.field_of_study.field_name if student.field_of_study else 'Brak kierunku'})"
+        
+        # Odśwież listę ocen
         self.refresh_grades_list()
         
     def refresh_grades_list(self):

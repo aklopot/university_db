@@ -10,6 +10,7 @@ import json
 from clients.gui_kivy.utils.colors import *
 from clients.gui_kivy.utils.dialog_utils import DialogUtils
 from clients.gui_kivy.utils.fonts import *
+from kivy.uix.widget import Widget
 
 class StudentView(Screen):
     def __init__(self, **kwargs):
@@ -71,6 +72,9 @@ class StudentView(Screen):
         students = self.service.get_all_students()
         self.student_list_container.clear_widgets()
         
+        # Dodaj odstęp na górze listy
+        self.student_list_container.add_widget(Widget(size_hint_y=None, height=10))
+        
         for student in students:
             student_box = BoxLayout(
                 orientation='horizontal',
@@ -79,8 +83,9 @@ class StudentView(Screen):
                 spacing=2
             )
             
+            # Dodajemy kierunek studiów i numer indeksu do wyświetlanych informacji
             student_box.add_widget(Label(
-                text=f"{student.first_name} {student.last_name}",
+                text=f"{student.first_name} {student.last_name} - {student.index_number} ({student.field_of_study.field_name if student.field_of_study else 'Brak kierunku'})",
                 size_hint_x=0.6,
                 font_size=FONT_SIZE_LIST_ITEM,
                 color=TEXT_WHITE

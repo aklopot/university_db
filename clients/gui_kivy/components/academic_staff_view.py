@@ -8,6 +8,7 @@ from src.services.service_factory import ServiceFactory
 from clients.gui_kivy.utils.colors import *
 from clients.gui_kivy.utils.dialog_utils import DialogUtils
 from clients.gui_kivy.utils.fonts import *
+from kivy.uix.widget import Widget
 import json
 
 class AcademicStaffView(Screen):
@@ -69,6 +70,9 @@ class AcademicStaffView(Screen):
             self.academic_staff_list_container.clear_widgets()
             print(f"Odświeżam listę pracowników, znaleziono: {len(academic_staff_list)}")  # Debug log
             
+            # Dodaj odstęp na górze listy
+            self.academic_staff_list_container.add_widget(Widget(size_hint_y=None, height=10))
+            
             for academic_staff in academic_staff_list:
                 # Główny box dla wiersza z pracownikiem
                 academic_staff_box = BoxLayout(
@@ -80,7 +84,7 @@ class AcademicStaffView(Screen):
                 
                 # Label z danymi pracownika
                 academic_staff_box.add_widget(Label(
-                    text=f"{academic_staff.first_name} {academic_staff.last_name}",
+                    text=f"{academic_staff.first_name} {academic_staff.last_name} ({academic_staff.position.value})",
                     size_hint_x=0.6,
                     font_size=FONT_SIZE_LIST_ITEM,
                     color=TEXT_WHITE
