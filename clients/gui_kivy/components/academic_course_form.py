@@ -31,19 +31,23 @@ class AcademicCourseForm(Screen):
         )
         self.layout.add_widget(self.title_label)
         
-        # Inicjalizacja pól tekstowych
+        # Inicjalizacja pól tekstowych z wycentrowanym tekstem
         self.course_name_input = TextInput(
             hint_text="Wprowadź nazwę kursu",
             multiline=False,
             size_hint_y=None,
-            height=40
+            height=40,
+            padding=[10, (40-20)/2],  # Centrowanie w pionie (wysokość - wysokość tekstu)/2
+            halign='center'           # Centrowanie w poziomie
         )
         
         self.ects_credits_input = TextInput(
             hint_text="Wprowadź liczbę punktów ECTS",
             multiline=False,
             size_hint_y=None,
-            height=40
+            height=40,
+            padding=[10, (40-20)/2],
+            halign='center'
         )
 
         # Sekcje formularza

@@ -25,27 +25,37 @@ class FieldOfStudyForm(Screen):
         )
         self.layout.add_widget(self.title_label)
         
-        # Pole nazwy kierunku
-        field_section = BoxLayout(
-            orientation='vertical',
-            size_hint_y=None,
-            height=70,
-            spacing=5
-        )
-        field_section.add_widget(Label(
-            text="Nazwa kierunku:",
-            size_hint_y=None,
-            height=20,
-            color=TEXT_WHITE
-        ))
+        # Inicjalizacja pól tekstowych z wycentrowanym tekstem
         self.field_name_input = TextInput(
             hint_text="Wprowadź nazwę kierunku",
             multiline=False,
             size_hint_y=None,
-            height=40
+            height=40,
+            padding=[10, (40-20)/2],  # Centrowanie w pionie (wysokość - wysokość tekstu)/2
+            halign='center'           # Centrowanie w poziomie
         )
-        field_section.add_widget(self.field_name_input)
-        self.layout.add_widget(field_section)
+
+        # Sekcje formularza
+        input_sections = [
+            ("Nazwa kierunku:", self.field_name_input)
+        ]
+
+        # Dodawanie sekcji z polami tekstowymi
+        for label_text, input_field in input_sections:
+            section = BoxLayout(
+                orientation='vertical',
+                size_hint_y=None,
+                height=70,
+                spacing=5
+            )
+            section.add_widget(Label(
+                text=label_text,
+                size_hint_y=None,
+                height=20,
+                color=TEXT_WHITE
+            ))
+            section.add_widget(input_field)
+            self.layout.add_widget(section)
         
         # Przyciski
         button_layout = BoxLayout(

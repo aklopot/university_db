@@ -37,19 +37,25 @@ class AcademicStaffForm(Screen):
                 hint_text="Wprowadź imię",
                 multiline=False,
                 size_hint_y=None,
-                height=40
+                height=40,
+                padding=[10, (40-20)/2],  # Centrowanie w pionie (wysokość - wysokość tekstu)/2
+                halign='center'           # Centrowanie w poziomie
             )),
             ("Nazwisko:", TextInput(
                 hint_text="Wprowadź nazwisko",
                 multiline=False,
                 size_hint_y=None,
-                height=40
+                height=40,
+                padding=[10, (40-20)/2],
+                halign='center'
             )),
             ("PESEL:", TextInput(
                 hint_text="Wprowadź PESEL",
                 multiline=False,
                 size_hint_y=None,
-                height=40
+                height=40,
+                padding=[10, (40-20)/2],
+                halign='center'
             ))
         ]
         

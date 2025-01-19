@@ -33,26 +33,38 @@ class StudentForm(Screen):
         )
         self.layout.add_widget(self.title_label)
         
-        # Inicjalizacja pól formularza
+        # Inicjalizacja pól formularza z wycentrowanym tekstem
         self.first_name_input = TextInput(
             hint_text="Wprowadź imię",
+            multiline=False,
             size_hint_y=None,
-            height=40
+            height=40,
+            padding=[10, (40-20)/2],  # Centrowanie w pionie (wysokość - wysokość tekstu)/2
+            halign='center'           # Centrowanie w poziomie
         )
         self.last_name_input = TextInput(
             hint_text="Wprowadź nazwisko",
+            multiline=False,
             size_hint_y=None,
-            height=40
+            height=40,
+            padding=[10, (40-20)/2],
+            halign='center'
         )
         self.index_number_input = TextInput(
             hint_text="Wprowadź numer indeksu",
+            multiline=False,
             size_hint_y=None,
-            height=40
+            height=40,
+            padding=[10, (40-20)/2],
+            halign='center'
         )
         self.pesel_input = TextInput(
             hint_text="Wprowadź PESEL",
+            multiline=False,
             size_hint_y=None,
-            height=40
+            height=40,
+            padding=[10, (40-20)/2],
+            halign='center'
         )
 
         # Definicja sekcji z etykietami i polami

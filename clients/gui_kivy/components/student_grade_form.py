@@ -28,7 +28,7 @@ class StudentGradeForm(Screen):
         )
         self.layout.add_widget(self.title_label)
         
-        # Pole wartości oceny
+        # Pole wartości oceny z wycentrowanym tekstem
         grade_section = BoxLayout(
             orientation='vertical',
             size_hint_y=None,
@@ -45,7 +45,9 @@ class StudentGradeForm(Screen):
             hint_text="Wprowadź ocenę (np. 4.5)",
             multiline=False,
             size_hint_y=None,
-            height=40
+            height=40,
+            padding=[10, (40-20)/2],  # Centrowanie w pionie (wysokość - wysokość tekstu)/2
+            halign='center'           # Centrowanie w poziomie
         )
         grade_section.add_widget(self.grade_value_input)
         self.layout.add_widget(grade_section)
