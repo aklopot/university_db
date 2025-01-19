@@ -65,6 +65,16 @@ class MenuScreen(Screen):
         academic_course_button.bind(on_press=lambda x: self.go_to_view('academic_course_view'))
         layout.add_widget(academic_course_button)
 
+        # Dodaj przycisk zarządzania kierunkami studiów przed przyciskiem wyjścia
+        field_of_study_button = Button(
+            text='Zarządzaj kierunkami studiów',
+            size_hint_y=None,
+            height=50,
+            background_color=BUTTON_GREEN
+        )
+        field_of_study_button.bind(on_press=lambda x: self.go_to_view('field_of_study_view'))
+        layout.add_widget(field_of_study_button)
+
         # Przycisk wyjścia z programu
         exit_button = Button(
             text='Zamknij program', 
