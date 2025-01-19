@@ -7,6 +7,8 @@ from kivy.uix.popup import Popup
 from kivy.uix.widget import Widget
 from src.services.service_factory import ServiceFactory
 from clients.gui_kivy.utils.colors import *  # Dodajemy import kolorów
+from clients.gui_kivy.utils.dialog_utils import DialogUtils
+from clients.gui_kivy.utils.fonts import *  # Dodajemy import stałych czcionek
 import json
 
 class GenderSelectionScreen(Screen):
@@ -21,6 +23,17 @@ class GenderSelectionScreen(Screen):
             padding=10,  # Dodajemy padding 10 ze wszystkich stron
             spacing=10   # Dodajemy odstęp między elementami
         )
+        
+        # Tytuł - używamy stałej FONT_SIZE_TITLE
+        title_label = Label(
+            text="Wybierz płeć",
+            font_size=FONT_SIZE_TITLE,
+            size_hint_y=None,
+            height=50,
+            halign='center',
+            color=TEXT_WHITE
+        )
+        self.layout.add_widget(title_label)
         
         # Przewijalna lista płci
         self.gender_list_container = BoxLayout(
@@ -87,14 +100,14 @@ class GenderSelectionScreen(Screen):
                 spacing=2  # Zmniejszony odstęp między elementami
             )
             
-            # Label z nazwą płci
+            # Label z nazwą płci - używamy stałej FONT_SIZE_LIST_ITEM
             gender_box.add_widget(Label(
                 text=gender.gender_name,
                 size_hint_x=0.6,
+                font_size=FONT_SIZE_LIST_ITEM,
                 halign='left',
                 valign='middle',
-                color=TEXT_WHITE,
-                text_size=(None, 50)  # Ustawienie wysokości tekstu
+                color=TEXT_WHITE
             ))
             
             # Kontener na przyciski

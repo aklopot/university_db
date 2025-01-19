@@ -4,71 +4,71 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
+from kivy.uix.popup import Popup
 from src.services.service_factory import ServiceFactory
 from clients.gui_kivy.utils.colors import *
+from clients.gui_kivy.utils.dialog_utils import DialogUtils
+from clients.gui_kivy.utils.fonts import *
 
 class AddressSelectionScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.service = ServiceFactory().get_address_service()
+        self.address_service = ServiceFactory().get_address_service()
         
-        layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        # Główny układ z paddingiem
+        self.layout = BoxLayout(
+            orientation='vertical',
+            padding=10,  # Dodajemy padding 10 ze wszystkich stron
+            spacing=10   # Dodajemy odstęp między elementami
+        )
         
-        # Tytuł
+        # Tytuł - używamy stałej FONT_SIZE_TITLE
         title_label = Label(
-            text="Wybór adresu",
-            font_size='24sp',
+            text="Wybierz adres",
+            font_size=FONT_SIZE_TITLE,
             size_hint_y=None,
             height=50,
             halign='center',
             color=TEXT_WHITE
         )
-        layout.add_widget(title_label)
+        self.layout.add_widget(title_label)
         
-        # Odstęp po tytule
-        layout.add_widget(Widget(size_hint_y=None, height=20))
-
-        # Kontener na listę adresów
-        self.address_list_container = BoxLayout(
-            orientation='vertical',
-            size_hint_y=None,
-            spacing=5  # Odstęp między adresami
-        )
+        # Lista adresów
+        self.address_list_container = BoxLayout(orientation='vertical', size_hint_y=None)
         self.address_list_container.bind(minimum_height=self.address_list_container.setter('height'))
-        
-        # ScrollView dla listy adresów
-        scroll_view = ScrollView(size_hint=(1, 1))
-        scroll_view.add_widget(self.address_list_container)
-        layout.add_widget(scroll_view)
+        self.scroll_view = ScrollView()
+        self.scroll_view.add_widget(self.address_list_container)
+        self.layout.add_widget(self.scroll_view)
         
         # Przyciski na dole
-        button_layout = BoxLayout(
-            size_hint_y=None, 
-            height=50, 
-            spacing=10,
-            padding=[0, 10, 0, 0]  # Dodatkowy odstęp od góry
+        bottom_layout = BoxLayout(
+            size_hint_y=None,
+            height=50,
+            spacing=10  # Odstęp między przyciskami
         )
         
-        # Przycisk powrotu
-        return_button = Button(
-            text='Powrót',
-            size_hint_x=0.5,
+        # Przycisk Anuluj (po lewej)
+        cancel_button = Button(
+            text='Anuluj',
+            size_hint_y=None,
+            height=50,
             background_color=BUTTON_PEARL
         )
-        return_button.bind(on_press=self.return_to_previous)
-        button_layout.add_widget(return_button)
+        cancel_button.bind(on_press=self.cancel)
+        bottom_layout.add_widget(cancel_button)
         
-        # Przycisk dodawania
+        # Przycisk Dodaj adres (po prawej)
         add_button = Button(
-            text='Dodaj nowy adres',
-            size_hint_x=0.5,
+            text='Dodaj adres',
+            size_hint_y=None,
+            height=50,
             background_color=BUTTON_GREEN
         )
         add_button.bind(on_press=self.open_add_address_form)
-        button_layout.add_widget(add_button)
+        bottom_layout.add_widget(add_button)
         
-        layout.add_widget(button_layout)
-        self.add_widget(layout)
+        self.layout.add_widget(bottom_layout)
+        self.add_widget(self.layout)
         
         # Dodajemy te pola, które są potrzebne do działania ekranu
         self.previous_screen = None  # Nazwa poprzedniego ekranu
@@ -82,32 +82,30 @@ class AddressSelectionScreen(Screen):
         self.refresh_address_list()
         
     def refresh_address_list(self):
-        addresses = self.service.get_all_addresses()
+        addresses = self.address_service.get_all_addresses()
         self.address_list_container.clear_widgets()
         
         # Dodaj odstęp na górze listy
         self.address_list_container.add_widget(Widget(size_hint_y=None, height=10))
         
         for address in addresses:
-            # Kontener dla pojedynczego adresu
+            # Główny box dla wiersza z adresem
             address_box = BoxLayout(
                 orientation='horizontal',
                 size_hint_y=None,
                 height=50,
-                spacing=2  # Zmniejszony odstęp między elementami w wierszu
+                spacing=2  # Zmniejszony odstęp między elementami
             )
             
-            # Label z danymi adresu
-            address_info = f"{address.street}, {address.city}"
-            address_label = Label(
-                text=address_info,
+            # Label z danymi adresu - używamy stałej FONT_SIZE_LIST_ITEM
+            address_box.add_widget(Label(
+                text=f"{address.street}, {address.city}",
                 size_hint_x=0.6,
+                font_size=FONT_SIZE_LIST_ITEM,
                 halign='left',
                 valign='middle',
-                color=TEXT_WHITE,
-                text_size=(None, 50)  # Ustawienie wysokości tekstu
-            )
-            address_box.add_widget(address_label)
+                color=TEXT_WHITE
+            ))
             
             # Kontener na przyciski
             buttons_box = BoxLayout(
@@ -197,10 +195,10 @@ class AddressSelectionScreen(Screen):
         popup.open()
     
     def confirm_delete_address(self, address, popup):
-        self.service.delete_address(address.address_id)
+        self.address_service.delete_address(address.address_id)
         self.refresh_address_list()
         popup.dismiss()
     
-    def return_to_previous(self, instance):
+    def cancel(self, instance):
         # Wróć do poprzedniego ekranu
         self.manager.current = self.previous_screen
