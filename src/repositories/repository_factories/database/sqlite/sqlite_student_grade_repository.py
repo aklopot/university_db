@@ -30,7 +30,7 @@ class SQLiteStudentGradeRepository(BaseStudentGradeRepository):
                 StudentGrade.student_id == student_id
             ).options(
                 joinedload(StudentGrade.academic_course),
-                joinedload(StudentGrade.student)
+                joinedload(StudentGrade.student).joinedload(Student.field_of_study)
             )
             return list(session.exec(statement))
 
