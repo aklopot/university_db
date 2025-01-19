@@ -1,5 +1,5 @@
 from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager
+from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.core.window import Window
 from clients.gui_kivy.components.menu_screen import MenuScreen
 from clients.gui_kivy.components.student_view import StudentView
@@ -20,6 +20,12 @@ from clients.gui_kivy.components.student_grade_form import StudentGradeForm
 
 class UniversityDBApp(App):
     def build(self):
+        # Zwiększamy wysokość okna o 40px (z domyślnej wartości)
+        Window.size = (800, 750)  # Było (800, 600), teraz zwiększamy do 640
+        
+        # Ustawienie tytułu okna
+        self.title = 'Akademicka baza danych'
+        
         # Podłącz handler zamknięcia okna
         Window.bind(on_request_close=lambda *args: DialogUtils.show_exit_confirmation())
         

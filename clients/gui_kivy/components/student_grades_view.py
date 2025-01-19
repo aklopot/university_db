@@ -3,9 +3,11 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+from kivy.uix.popup import Popup
 from src.services.service_factory import ServiceFactory
 from clients.gui_kivy.utils.colors import *
 from clients.gui_kivy.utils.dialog_utils import DialogUtils
+from clients.gui_kivy.utils.fonts import *
 
 class StudentGradesView(Screen):
     def __init__(self, **kwargs):
@@ -19,7 +21,7 @@ class StudentGradesView(Screen):
         # Tytuł
         self.title_label = Label(
             text="Oceny studenta",
-            font_size='20sp',
+            font_size=FONT_SIZE_TITLE,
             size_hint_y=None,
             height=50,
             halign='center',
@@ -81,8 +83,9 @@ class StudentGradesView(Screen):
             )
             
             grade_box.add_widget(Label(
-                text=f"{grade.academic_course.academic_course_name} - {grade.grade_value} ({grade.grade_type.value})",
-                size_hint_x=0.7,
+                text=f"{grade.academic_course.academic_course_name}: {grade.grade_value} ({grade.grade_type.value})",
+                size_hint_x=0.6,
+                font_size=FONT_SIZE_LIST_ITEM,
                 color=TEXT_WHITE
             ))
             

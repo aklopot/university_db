@@ -7,6 +7,7 @@ from kivy.uix.popup import Popup
 from src.services.service_factory import ServiceFactory
 from clients.gui_kivy.utils.colors import *
 from clients.gui_kivy.utils.dialog_utils import DialogUtils
+from clients.gui_kivy.utils.fonts import *
 import json
 
 class AcademicStaffView(Screen):
@@ -21,7 +22,7 @@ class AcademicStaffView(Screen):
         # Tytuł
         title_label = Label(
             text="Lista pracowników akademickich",
-            font_size='20sp',
+            font_size=FONT_SIZE_TITLE,
             size_hint_y=None,
             height=50,
             halign='center',
@@ -81,7 +82,7 @@ class AcademicStaffView(Screen):
                 academic_staff_box.add_widget(Label(
                     text=f"{academic_staff.first_name} {academic_staff.last_name}",
                     size_hint_x=0.6,
-                    font_size='18sp',
+                    font_size=FONT_SIZE_LIST_ITEM,
                     color=TEXT_WHITE
                 ))
                 

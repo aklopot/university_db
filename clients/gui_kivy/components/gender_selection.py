@@ -4,7 +4,9 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.popup import Popup
+from kivy.uix.widget import Widget
 from src.services.service_factory import ServiceFactory
+from clients.gui_kivy.utils.colors import *  # Dodajemy import kolorów
 import json
 
 class GenderSelectionScreen(Screen):
@@ -13,33 +15,55 @@ class GenderSelectionScreen(Screen):
         
         self.gender_service = ServiceFactory().get_gender_service()
         
-        # Główny układ
-        self.layout = BoxLayout(orientation='vertical')
+        # Główny układ z paddingiem
+        self.layout = BoxLayout(
+            orientation='vertical',
+            padding=10,  # Dodajemy padding 10 ze wszystkich stron
+            spacing=10   # Dodajemy odstęp między elementami
+        )
         
         # Przewijalna lista płci
-        self.gender_list_container = BoxLayout(orientation='vertical', size_hint_y=None)
+        self.gender_list_container = BoxLayout(
+            orientation='vertical',
+            size_hint_y=None
+        )
         self.gender_list_container.bind(minimum_height=self.gender_list_container.setter('height'))
         self.gender_list_scroll = ScrollView()
         self.gender_list_scroll.add_widget(self.gender_list_container)
         self.layout.add_widget(self.gender_list_scroll)
         
         # Przyciski na dole
-        bottom_layout = BoxLayout(size_hint_y=None, height=50)
+        bottom_layout = BoxLayout(
+            size_hint_y=None,
+            height=50,
+            spacing=10  # Odstęp między przyciskami
+        )
         
-        add_button = Button(text='Add Gender')
-        add_button.bind(on_press=self.open_add_gender_form)
-        bottom_layout.add_widget(add_button)
-        
-        cancel_button = Button(text='Cancel')
+        # Przycisk Anuluj (po lewej)
+        cancel_button = Button(
+            text='Anuluj',
+            size_hint_y=None,
+            height=50,
+            background_color=BUTTON_PEARL
+        )
         cancel_button.bind(on_press=self.cancel)
         bottom_layout.add_widget(cancel_button)
         
-        self.layout.add_widget(bottom_layout)
+        # Przycisk Dodaj płeć (po prawej)
+        add_button = Button(
+            text='Dodaj płeć',
+            size_hint_y=None,
+            height=50,
+            background_color=BUTTON_GREEN
+        )
+        add_button.bind(on_press=self.open_add_gender_form)
+        bottom_layout.add_widget(add_button)
         
+        self.layout.add_widget(bottom_layout)
         self.add_widget(self.layout)
         
-        self.previous_screen = None  # Nazwa poprzedniego ekranu
-        self.parent_form = None      # Referencja do formularza, który otworzył ten ekran
+        self.previous_screen = None
+        self.parent_form = None
         
     def on_pre_enter(self):
         # Odśwież listę płci za każdym razem, gdy wchodzimy na ekran
@@ -51,23 +75,73 @@ class GenderSelectionScreen(Screen):
         # Wyczyść listę
         self.gender_list_container.clear_widgets()
         
+        # Dodaj odstęp na górze listy
+        self.gender_list_container.add_widget(Widget(size_hint_y=None, height=10))
+        
         for gender in genders:
-            gender_box = BoxLayout(orientation='horizontal', size_hint_y=None, height=50)
-            gender_box.add_widget(Label(text=gender.gender_name, size_hint_x=0.6))
+            # Główny box dla wiersza z płcią
+            gender_box = BoxLayout(
+                orientation='horizontal', 
+                size_hint_y=None, 
+                height=50,
+                spacing=2  # Zmniejszony odstęp między elementami
+            )
             
-            select_btn = Button(text='Select', size_hint_x=0.2)
-            select_btn.bind(on_press=lambda instance, gender=gender: self.select_gender(gender))
-            gender_box.add_widget(select_btn)
+            # Label z nazwą płci
+            gender_box.add_widget(Label(
+                text=gender.gender_name,
+                size_hint_x=0.6,
+                halign='left',
+                valign='middle',
+                color=TEXT_WHITE,
+                text_size=(None, 50)  # Ustawienie wysokości tekstu
+            ))
             
-            edit_btn = Button(text='Edit', size_hint_x=0.2)
-            edit_btn.bind(on_press=lambda instance, gender=gender: self.open_edit_gender_form(gender))
-            gender_box.add_widget(edit_btn)
+            # Kontener na przyciski
+            buttons_box = BoxLayout(
+                size_hint_x=0.4,
+                spacing=2  # Zmniejszony odstęp między przyciskami
+            )
             
-            delete_btn = Button(text='Delete', size_hint_x=0.2)
-            delete_btn.bind(on_press=lambda instance, gender=gender: self.delete_gender(gender))
-            gender_box.add_widget(delete_btn)
+            # Przycisk wyboru
+            select_btn = Button(
+                text='Wybierz',
+                size_hint_x=0.33,
+                background_color=BUTTON_LIGHT_BLUE
+            )
+            select_btn.bind(on_press=lambda x, g=gender: self.select_gender(g))
+            buttons_box.add_widget(select_btn)
             
-            self.gender_list_container.add_widget(gender_box)
+            # Przycisk edycji
+            edit_btn = Button(
+                text='Edytuj',
+                size_hint_x=0.33,
+                background_color=BUTTON_GREEN
+            )
+            edit_btn.bind(on_press=lambda x, g=gender: self.open_edit_gender_form(g))
+            buttons_box.add_widget(edit_btn)
+            
+            # Przycisk usuwania
+            delete_btn = Button(
+                text='Usuń',
+                size_hint_x=0.33,
+                background_color=BUTTON_RED
+            )
+            delete_btn.bind(on_press=lambda x, g=gender: self.delete_gender(g))
+            buttons_box.add_widget(delete_btn)
+            
+            gender_box.add_widget(buttons_box)
+            
+            # Kontener z odstępami
+            container = BoxLayout(
+                orientation='vertical', 
+                size_hint_y=None, 
+                height=55,  # 50 na wiersz + 5 na odstęp
+                padding=[0, 0, 0, 5]  # Dolny padding 5
+            )
+            container.add_widget(gender_box)
+            
+            self.gender_list_container.add_widget(container)
             
     def select_gender(self, gender):
         if hasattr(self, 'parent_form'):

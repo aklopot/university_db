@@ -9,6 +9,7 @@ from src.models.universitydb import Address, Gender, Student, FieldOfStudy
 import json
 from typing import Optional
 from clients.gui_kivy.utils.colors import *
+from clients.gui_kivy.utils.fonts import *
 
 class StudentForm(Screen):
     def __init__(self, **kwargs):
@@ -24,7 +25,7 @@ class StudentForm(Screen):
         # Tytuł
         self.title_label = Label(
             text="Dodaj studenta",
-            font_size='20sp',
+            font_size=FONT_SIZE_TITLE,
             size_hint_y=None,
             height=50,
             halign='center',
@@ -96,7 +97,7 @@ class StudentForm(Screen):
         self.selected_gender_label = Label(
             text='Nie wybrano',
             size_hint_y=None,
-            height=25,
+            height=20,
             color=TEXT_WHITE
         )
         gender_section.add_widget(self.selected_gender_label)
@@ -127,7 +128,7 @@ class StudentForm(Screen):
         self.selected_address_label = Label(
             text='Nie wybrano',
             size_hint_y=None,
-            height=25,
+            height=20,
             color=TEXT_WHITE
         )
         address_section.add_widget(self.selected_address_label)

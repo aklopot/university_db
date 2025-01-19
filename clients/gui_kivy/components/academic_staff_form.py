@@ -7,6 +7,7 @@ from kivy.uix.spinner import Spinner  # Import Spinner dla listy rozwijanej
 from src.services.service_factory import ServiceFactory
 from src.models.universitydb import Address, Gender, AcademicStaff, AcademicPosition
 from clients.gui_kivy.utils.colors import *  # Dodajemy import kolorów
+from clients.gui_kivy.utils.fonts import *  # Dodajemy import stałych czcionek
 import json
 
 class AcademicStaffForm(Screen):
@@ -18,6 +19,17 @@ class AcademicStaffForm(Screen):
         self.address_service = ServiceFactory().get_address_service()
         
         self.layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        
+        # Tytuł - używamy stałej FONT_SIZE_TITLE
+        self.title_label = Label(
+            text="Dodaj pracownika",
+            font_size=FONT_SIZE_TITLE,  # Zmiana z '20sp' na stałą
+            size_hint_y=None,
+            height=50,
+            halign='center',
+            color=TEXT_WHITE
+        )
+        self.layout.add_widget(self.title_label)
         
         # Sekcje formularza z polami tekstowymi
         input_sections = [
@@ -102,7 +114,7 @@ class AcademicStaffForm(Screen):
         self.selected_gender_label = Label(
             text='Nie wybrano płci',
             size_hint_y=None,
-            height=25,
+            height=20,
             color=TEXT_WHITE
         )
         self.select_gender_button = Button(
@@ -132,7 +144,7 @@ class AcademicStaffForm(Screen):
         self.selected_address_label = Label(
             text='Nie wybrano adresu',
             size_hint_y=None,
-            height=25,
+            height=20,
             color=TEXT_WHITE
         )
         self.select_address_button = Button(
@@ -176,33 +188,44 @@ class AcademicStaffForm(Screen):
         self.selected_gender = None
         
     def clear_form(self):
+        """Czyści formularz do dodawania nowego pracownika"""
+        # Zmień tytuł na tryb dodawania
+        self.title_label.text = "Dodaj pracownika"
+        
         # Czyści pola formularza
         self.first_name_input.text = ''
         self.last_name_input.text = ''
         self.pesel_input.text = ''
-        self.position_spinner.text = 'Select Position'  # Reset Spinnera
-        self.selected_gender_label.text = 'No Gender Selected'
-        self.selected_address_label.text = 'No Address Selected'
+        self.position_spinner.text = 'Wybierz stanowisko'
+        self.selected_gender_label.text = 'Nie wybrano płci'
+        self.selected_address_label.text = 'Nie wybrano adresu'
         
+        # Resetuj zmienne stanu
         self.current_academic_staff = None
         self.selected_address = None
         self.selected_gender = None
         
     def load_academic_staff(self, academic_staff):
-        # Ładuje dane pracownika akademickiego do formularza (edycja)
+        """Ładuje dane pracownika do formularza w trybie edycji"""
+        # Zmień tytuł na tryb edycji
+        self.title_label.text = "Edytuj pracownika"
+        
+        # Załaduj dane pracownika
         self.current_academic_staff = academic_staff
         self.first_name_input.text = academic_staff.first_name
         self.last_name_input.text = academic_staff.last_name
         self.pesel_input.text = academic_staff.pesel
-        self.position_spinner.text = academic_staff.position.value  # Ustawienie Spinnera
+        self.position_spinner.text = academic_staff.position.value
         
-        # Wyświetl płeć pracownika akademickiego
-        self.selected_gender = academic_staff.gender
-        self.selected_gender_label.text = academic_staff.gender.gender_name
-        
-        # Wyświetl adres pracownika akademickiego
-        self.selected_address = academic_staff.address
-        self.selected_address_label.text = f"{academic_staff.address.street}, {academic_staff.address.city}"
+        # Załaduj płeć
+        if academic_staff.gender:
+            self.selected_gender = academic_staff.gender
+            self.selected_gender_label.text = academic_staff.gender.gender_name
+            
+        # Załaduj adres
+        if academic_staff.address:
+            self.selected_address = academic_staff.address
+            self.selected_address_label.text = f"{academic_staff.address.street}, {academic_staff.address.city}"
         
     def open_gender_selection(self, instance):
         # Przejdź do ekranu wyboru płci
