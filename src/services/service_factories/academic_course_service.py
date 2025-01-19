@@ -9,14 +9,15 @@ class AcademicCourseService:
     def __init__(self):
         self.repository = RepositoryFactory().get_academic_course_repository()
 
-    def add_academic_course(self, name: str, ects_credits: int, field_of_study_id: int) -> None:
+    def add_academic_course(self, name: str, ects_credits: int, field_of_study_id: int, academic_staff_id: Optional[int] = None) -> None:
         """
         Dodaje nowy kurs akademicki.
         """
         academic_course = AcademicCourse(
             academic_course_name=name,
             ects_credits=ects_credits,
-            field_of_study_id=field_of_study_id
+            field_of_study_id=field_of_study_id,
+            academic_staff_id=academic_staff_id
         )
         self.repository.add_academic_course(academic_course)
 
