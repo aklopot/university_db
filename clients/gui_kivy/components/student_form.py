@@ -80,7 +80,7 @@ class StudentForm(Screen):
             section.add_widget(input_field)
             self.layout.add_widget(section)
 
-        # Sekcja wyboru płci (wysokość zwiększona ze względu na potrzebę wyświetlenia wybranej wartości)
+        # Sekcja wyboru płci
         gender_section = BoxLayout(
             orientation='vertical',
             size_hint_y=None,
@@ -107,7 +107,9 @@ class StudentForm(Screen):
             height=40,
             background_color=BUTTON_LIGHT_BLUE
         )
+        self.select_gender_button.bind(on_press=self.open_gender_selection)
         gender_section.add_widget(self.select_gender_button)
+        self.layout.add_widget(gender_section)
         
         # Sekcja wyboru adresu (podobna wysokość jak płeć)
         address_section = BoxLayout(
@@ -162,7 +164,6 @@ class StudentForm(Screen):
         field_study_section.add_widget(self.field_of_study_spinner)
         
         # Dodawanie wszystkich elementów do głównego layoutu
-        self.layout.add_widget(gender_section)
         self.layout.add_widget(address_section)
         self.layout.add_widget(field_study_section)
         
@@ -180,7 +181,7 @@ class StudentForm(Screen):
             text='Zapisz',
             background_color=BUTTON_GREEN
         )
-        save_button.bind(on_press=self.save_student)
+        save_button.bind(on_press=self.save)
         button_layout.add_widget(save_button)
         
         self.layout.add_widget(button_layout)
@@ -193,11 +194,9 @@ class StudentForm(Screen):
         self.selected_field_of_study = None
         
         # Aktualizacja kolorów dla etykiet
-        self.selected_gender_label.color = TEXT_WHITE
         self.selected_address_label.color = TEXT_WHITE
 
         # Aktualizacja kolorów dla przycisków wyboru
-        self.select_gender_button.background_color = BUTTON_LIGHT_BLUE
         self.select_address_button.background_color = BUTTON_LIGHT_BLUE
         
         # Aktualizacja koloru dla spinnera
@@ -206,6 +205,17 @@ class StudentForm(Screen):
     def _get_field_of_study_names(self) -> list[str]:
         fields = self.field_of_study_service.get_all_fields_of_study()
         return [field.field_name for field in fields]
+        
+    def _get_gender_names(self) -> list[str]:
+        genders = self.gender_service.get_all_genders()
+        return [gender.gender_name for gender in genders]
+
+    def _get_gender_by_name(self, name: str):
+        genders = self.gender_service.get_all_genders()
+        for gender in genders:
+            if gender.gender_name == name:
+                return gender
+        return None
         
     def clear_form(self):
         # Ustaw tytuł dla nowego studenta
@@ -216,9 +226,9 @@ class StudentForm(Screen):
         self.last_name_input.text = ''
         self.index_number_input.text = ''
         self.pesel_input.text = ''
-        self.selected_gender_label.text = 'Nie wybrano'
         self.selected_address_label.text = 'Nie wybrano'
         self.field_of_study_spinner.text = 'Wybierz kierunek'
+        self.selected_gender_label.text = 'Nie wybrano'
         
         self.current_student = None
         self.selected_address = None
@@ -237,8 +247,9 @@ class StudentForm(Screen):
         self.pesel_input.text = student.pesel
         
         # Wyświetl płeć studenta
-        self.selected_gender = student.gender
-        self.selected_gender_label.text = student.gender.gender_name
+        if student.gender:
+            self.selected_gender = student.gender
+            self.selected_gender_label.text = student.gender.gender_name
         
         # Wyświetl adres studenta
         self.selected_address = student.address
@@ -256,13 +267,6 @@ class StudentForm(Screen):
             )
         return None
         
-    def open_gender_selection(self, instance):
-        # Przejdź do ekranu wyboru płci
-        self.manager.current = 'gender_selection'
-        gender_selection_screen = self.manager.get_screen('gender_selection')
-        gender_selection_screen.previous_screen = 'student_form'
-        gender_selection_screen.parent_form = self  # Przekazujemy referencję do tego formularza
-        
     def open_address_selection(self, instance):
         # Przejdź do ekranu wyboru adresu
         self.manager.current = 'address_selection'
@@ -270,17 +274,28 @@ class StudentForm(Screen):
         address_selection_screen.previous_screen = 'student_form'
         address_selection_screen.parent_form = self  # Przekazujemy referencję do tego formularza
         
-    def save_student(self, instance):
+    def open_gender_selection(self, instance):
+        # Przejdź do ekranu wyboru płci
+        self.manager.current = 'gender_selection'
+        gender_selection_screen = self.manager.get_screen('gender_selection')
+        gender_selection_screen.previous_screen = 'student_form'
+        gender_selection_screen.parent_form = self
+        
+    def save(self, instance):
         try:
-            first_name = self.first_name_input.text
-            last_name = self.last_name_input.text
-            index_number = self.index_number_input.text
-            pesel = self.pesel_input.text
+            first_name = self.first_name_input.text.strip()
+            last_name = self.last_name_input.text.strip()
+            index_number = self.index_number_input.text.strip()
+            pesel = self.pesel_input.text.strip()
             
-            if not self.selected_gender:
-                print("No gender selected.")
+            if not all([first_name, last_name, index_number, pesel]):
+                print("Wszystkie pola muszą być wypełnione")
                 return
-            
+
+            if not self.selected_gender:
+                print("Nie wybrano płci")
+                return
+
             if not self.selected_address:
                 print("No address selected.")
                 return
@@ -294,6 +309,7 @@ class StudentForm(Screen):
                 self.current_student.index_number = index_number
                 self.current_student.pesel = pesel
                 self.current_student.gender = self.selected_gender
+                self.current_student.gender_id = self.selected_gender.gender_id
                 self.current_student.address = self.selected_address
                 self.current_student.field_of_study = field_of_study
                 self.current_student.field_of_study_id = field_of_study.field_of_study_id if field_of_study else None
@@ -307,6 +323,7 @@ class StudentForm(Screen):
                     index_number=index_number,
                     pesel=pesel,
                     gender=self.selected_gender,
+                    gender_id=self.selected_gender.gender_id,
                     address=self.selected_address,
                     field_of_study=field_of_study,
                     field_of_study_id=field_of_study.field_of_study_id if field_of_study else None

@@ -37,48 +37,48 @@ class MenuScreen(Screen):
         # Dodanie odstępu
         layout.add_widget(Widget(size_hint_y=None, height=10))
 
-        # Przyciski do wyboru widoków
+        # Pierwszy rząd przycisków (Studenci i Pracownicy)
+        first_row = BoxLayout(size_hint_y=None, height=50, spacing=10)
+        
         student_button = Button(
-            text='Zarządzaj studentami', 
-            size_hint_y=None, 
-            height=50,
+            text='Zarządzaj studentami',
             background_color=BUTTON_GREEN
         )
         student_button.bind(on_press=lambda x: self.go_to_view('student_view'))
-        layout.add_widget(student_button)
+        first_row.add_widget(student_button)
 
         academic_staff_button = Button(
-            text='Zarządzaj pracownikami', 
-            size_hint_y=None, 
-            height=50,
+            text='Zarządzaj pracownikami',
             background_color=BUTTON_GREEN
         )
         academic_staff_button.bind(on_press=lambda x: self.go_to_view('academic_staff_view'))
-        layout.add_widget(academic_staff_button)
+        first_row.add_widget(academic_staff_button)
+        
+        layout.add_widget(first_row)
+
+        # Drugi rząd przycisków (Kursy i Kierunki)
+        second_row = BoxLayout(size_hint_y=None, height=50, spacing=10)
         
         academic_course_button = Button(
             text='Zarządzaj kursami akademickimi',
-            size_hint_y=None,
-            height=50,
             background_color=BUTTON_GREEN
         )
         academic_course_button.bind(on_press=lambda x: self.go_to_view('academic_course_view'))
-        layout.add_widget(academic_course_button)
+        second_row.add_widget(academic_course_button)
 
-        # Dodaj przycisk zarządzania kierunkami studiów przed przyciskiem wyjścia
         field_of_study_button = Button(
             text='Zarządzaj kierunkami studiów',
-            size_hint_y=None,
-            height=50,
             background_color=BUTTON_GREEN
         )
         field_of_study_button.bind(on_press=lambda x: self.go_to_view('field_of_study_view'))
-        layout.add_widget(field_of_study_button)
+        second_row.add_widget(field_of_study_button)
+        
+        layout.add_widget(second_row)
 
         # Przycisk wyjścia z programu
         exit_button = Button(
-            text='Zamknij program', 
-            size_hint_y=None, 
+            text='Zamknij program',
+            size_hint_y=None,
             height=50,
             background_color=BUTTON_RED
         )

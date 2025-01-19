@@ -15,6 +15,8 @@ from clients.gui_kivy.components.academic_course_form import AcademicCourseForm
 from clients.gui_kivy.utils.dialog_utils import DialogUtils
 from clients.gui_kivy.components.field_of_study_view import FieldOfStudyView
 from clients.gui_kivy.components.field_of_study_form import FieldOfStudyForm
+from clients.gui_kivy.components.student_grades_view import StudentGradesView
+from clients.gui_kivy.components.student_grade_form import StudentGradeForm
 
 class UniversityDBApp(App):
     def build(self):
@@ -37,6 +39,10 @@ class UniversityDBApp(App):
         self.sm.add_widget(GenderSelectionScreen(name='gender_selection'))
         self.sm.add_widget(FieldOfStudyView(name='field_of_study_view'))
         self.sm.add_widget(FieldOfStudyForm(name='field_of_study_form'))
+        
+        # Dodanie nowych ekranów dla ocen
+        self.sm.add_widget(StudentGradesView(name='student_grades_view'))
+        self.sm.add_widget(StudentGradeForm(name='student_grade_form'))
 
         return self.sm
 

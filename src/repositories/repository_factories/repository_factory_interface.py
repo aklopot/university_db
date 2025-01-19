@@ -5,6 +5,7 @@ from src.repositories.base_repositories.base_gender_repository import BaseGender
 from src.repositories.base_repositories.base_address_repository import BaseAddressRepository
 from src.repositories.base_repositories.base_field_of_study_repository import BaseFieldOfStudyRepository
 from src.repositories.base_repositories.base_academic_course_repository import BaseAcademicCourseRepository
+from src.repositories.base_repositories.base_student_grade_repository import BaseStudentGradeRepository
 
 class RepositoryFactoryInterface(ABC):
     """Interfejs fabryki repozytoriów"""
@@ -31,4 +32,8 @@ class RepositoryFactoryInterface(ABC):
         
     @abstractmethod
     def create_academic_course_repository(self) -> BaseAcademicCourseRepository:
+        pass
+        
+    @abstractmethod
+    def create_student_grade_repository(self) -> BaseStudentGradeRepository:
         pass 

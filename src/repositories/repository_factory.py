@@ -8,6 +8,7 @@ from src.repositories.base_repositories.base_gender_repository import BaseGender
 from src.repositories.base_repositories.base_address_repository import BaseAddressRepository
 from src.repositories.base_repositories.base_field_of_study_repository import BaseFieldOfStudyRepository
 from src.repositories.base_repositories.base_academic_course_repository import BaseAcademicCourseRepository
+from src.repositories.base_repositories.base_student_grade_repository import BaseStudentGradeRepository
 from src.config.config_loader import load_config
 
 class RepositoryFactory:
@@ -36,3 +37,6 @@ class RepositoryFactory:
         
     def get_academic_course_repository(self) -> BaseAcademicCourseRepository:
         return self.factory.create_academic_course_repository()
+
+    def get_student_grade_repository(self) -> BaseStudentGradeRepository:
+        return self.factory.create_student_grade_repository()

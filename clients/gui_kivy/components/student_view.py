@@ -68,37 +68,31 @@ class StudentView(Screen):
 
     def refresh_student_list(self):
         students = self.service.get_all_students()
-
-        # Wyczyść listę
         self.student_list_container.clear_widgets()
-
+        
         for student in students:
-            # Główny box dla wiersza ze studentem
             student_box = BoxLayout(
-                orientation='horizontal', 
-                size_hint_y=None, 
+                orientation='horizontal',
+                size_hint_y=None,
                 height=50,
-                spacing=2  # Odstęp poziomy między elementami
+                spacing=2
             )
             
-            # Label z danymi studenta
-            student_info = f"{student.first_name} {student.last_name} (Index: {student.index_number})"
             student_box.add_widget(Label(
-                text=student_info, 
+                text=f"{student.first_name} {student.last_name}",
                 size_hint_x=0.6,
                 font_size='18sp',
                 color=TEXT_WHITE
             ))
             
-            # Przyciski w osobnym boxlayout dla lepszego rozmieszczenia
             buttons_box = BoxLayout(
-                size_hint_x=0.4, 
-                spacing=2  # Odstęp poziomy między przyciskami
+                size_hint_x=0.4,
+                spacing=2
             )
             
             edit_btn = Button(
                 text='Edytuj',
-                size_hint_x=0.5,
+                size_hint_x=0.33,
                 background_color=BUTTON_GREEN
             )
             edit_btn.bind(on_press=lambda instance, student=student: self.edit_student(student))
@@ -106,16 +100,23 @@ class StudentView(Screen):
 
             delete_btn = Button(
                 text='Usuń',
-                size_hint_x=0.5,
+                size_hint_x=0.33,
                 background_color=BUTTON_RED
             )
             delete_btn.bind(on_press=lambda instance, student=student: self.delete_student(student))
             buttons_box.add_widget(delete_btn)
+
+            grades_btn = Button(
+                text='Oceny',
+                size_hint_x=0.33,
+                background_color=BUTTON_LIGHT_BLUE
+            )
+            grades_btn.bind(on_press=lambda instance, student=student: self.show_student_grades(student))
+            buttons_box.add_widget(grades_btn)
             
             student_box.add_widget(buttons_box)
             
-            # Dodaj odstęp pionowy między wierszami
-            container = BoxLayout(orientation='vertical', size_hint_y=None, height=55)  # 50 + 5 na margines
+            container = BoxLayout(orientation='vertical', size_hint_y=None, height=55)
             container.add_widget(student_box)
             
             self.student_list_container.add_widget(container)
@@ -143,3 +144,8 @@ class StudentView(Screen):
 
     def return_to_main_menu(self, instance):
         self.manager.current = 'menu'
+
+    def show_student_grades(self, student):
+        self.manager.current = 'student_grades_view'
+        grades_screen = self.manager.get_screen('student_grades_view')
+        grades_screen.load_student_grades(student)

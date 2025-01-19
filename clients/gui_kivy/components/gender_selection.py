@@ -70,11 +70,10 @@ class GenderSelectionScreen(Screen):
             self.gender_list_container.add_widget(gender_box)
             
     def select_gender(self, gender):
-        # Ustaw wybraną płeć w formularzu rodzica
-        self.parent_form.selected_gender = gender
-        self.parent_form.selected_gender_label.text = gender.gender_name
-        # Wróć do formularza studenta
-        self.manager.current = self.previous_screen
+        if hasattr(self, 'parent_form'):
+            self.parent_form.selected_gender = gender
+            self.parent_form.selected_gender_label.text = gender.gender_name
+            self.manager.current = self.previous_screen
         
     def open_add_gender_form(self, instance):
         # Przejdź do ekranu formularza dodawania płci
