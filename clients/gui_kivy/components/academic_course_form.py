@@ -7,6 +7,7 @@ from kivy.uix.spinner import Spinner
 from src.services.service_factory import ServiceFactory
 from src.models.universitydb import AcademicCourse, AcademicStaff
 from clients.gui_kivy.utils.colors import *
+from clients.gui_kivy.utils.fonts import *
 from typing import Optional
 
 class AcademicCourseForm(Screen):
@@ -18,6 +19,17 @@ class AcademicCourseForm(Screen):
         self.academic_staff_service = ServiceFactory().get_academic_staff_service()
         
         self.layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        
+        # Tytuł - używamy stałej FONT_SIZE_TITLE
+        self.title_label = Label(
+            text="Dodaj kurs akademicki",
+            font_size=FONT_SIZE_TITLE,
+            size_hint_y=None,
+            height=50,
+            halign='center',
+            color=TEXT_WHITE
+        )
+        self.layout.add_widget(self.title_label)
         
         # Inicjalizacja pól tekstowych
         self.course_name_input = TextInput(
@@ -152,23 +164,32 @@ class AcademicCourseForm(Screen):
         return None
 
     def clear_form(self):
+        """Czyści formularz do dodawania nowego kursu"""
+        # Zmień tytuł na tryb dodawania
+        self.title_label.text = "Dodaj kurs akademicki"
+        
+        # Czyści pola formularza
         self.course_name_input.text = ''
         self.ects_credits_input.text = ''
         self.field_of_study_spinner.text = 'Wybierz kierunek studiów'
         self.academic_staff_spinner.text = 'Wybierz prowadzącego'
-        self.current_course = None
         
+        self.current_course = None
+
     def load_course(self, course):
+        """Ładuje dane kursu do formularza w trybie edycji"""
+        # Zmień tytuł na tryb edycji
+        self.title_label.text = "Edytuj kurs akademicki"
+        
+        # Załaduj dane kursu
         self.current_course = course
         self.course_name_input.text = course.academic_course_name
         self.ects_credits_input.text = str(course.ects_credits)
         
-        # Załaduj kierunek studiów
-        if hasattr(course, 'field_of_study') and course.field_of_study:
+        if course.field_of_study:
             self.field_of_study_spinner.text = course.field_of_study.field_name
             
-        # Załaduj prowadzącego
-        if hasattr(course, 'academic_staff') and course.academic_staff:
+        if course.academic_staff:
             self.academic_staff_spinner.text = f"{course.academic_staff.first_name} {course.academic_staff.last_name}"
         else:
             self.academic_staff_spinner.text = 'Wybierz prowadzącego'
