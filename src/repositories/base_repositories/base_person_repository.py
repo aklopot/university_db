@@ -33,4 +33,17 @@ class BasePersonRepository(Generic[T], ABC):
         """
         Usuwa osobę o podanym identyfikatorze.
         """
+        pass
+
+    @abstractmethod
+    def get_by_last_name(self, last_name: str) -> List[T]:
+        """
+        Pobiera wszystkie osoby o podanym nazwisku.
+        
+        Args:
+            last_name (str): Nazwisko do wyszukania
+            
+        Returns:
+            List[T]: Lista znalezionych osób
+        """
         pass 

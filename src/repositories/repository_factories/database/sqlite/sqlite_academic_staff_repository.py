@@ -61,3 +61,13 @@ class SQLiteAcademicStaffRepository(BaseAcademicStaffRepository):
         except Exception as e:
             print(f"Błąd w repozytorium podczas usuwania pracownika: {e}")
             raise
+
+    def get_by_last_name(self, last_name: str) -> List[AcademicStaff]:
+        with Session(self.engine) as session:
+            statement = select(AcademicStaff).where(
+                AcademicStaff.last_name.ilike(f"{last_name}%")
+            ).options(
+                selectinload(AcademicStaff.gender),
+                selectinload(AcademicStaff.address)
+            )
+            return session.exec(statement).all()

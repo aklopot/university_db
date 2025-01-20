@@ -210,17 +210,61 @@ class AcademicStaffView(Screen):
 
     def search_by_name(self, instance):
         def handle_search(last_name):
-            staff_members = self.service.get_all_academic_staff()
-            filtered_staff = [
-                staff for staff in staff_members 
-                if staff.last_name.lower().startswith(last_name.lower())
-            ]
-            self.academic_staff_list_container.clear_widgets()
-            # Dodaj odstęp na górze listy
-            self.academic_staff_list_container.add_widget(Widget(size_hint_y=None, height=10))
-            for staff in filtered_staff:
-                # Tutaj dodajemy pracowników do listy - istniejący kod wyświetlania
-                self.add_staff_to_list(staff)
+            try:
+                filtered_staff = self.service.get_by_last_name(last_name)
+                self.academic_staff_list_container.clear_widgets()
+                self.academic_staff_list_container.add_widget(Widget(size_hint_y=None, height=10))
+                
+                for staff in filtered_staff:
+                    staff_box = BoxLayout(
+                        orientation='horizontal',
+                        size_hint_y=None,
+                        height=50,
+                        spacing=2
+                    )
+                    
+                    # Używamy tego samego formatu co w głównej liście
+                    staff_box.add_widget(Label(
+                        text=f"{staff.first_name} {staff.last_name} ({staff.position.value})",
+                        size_hint_x=0.6,
+                        font_size=FONT_SIZE_LIST_ITEM,
+                        color=TEXT_WHITE
+                    ))
+                    
+                    buttons_box = BoxLayout(
+                        size_hint_x=0.4,
+                        spacing=2
+                    )
+                    
+                    edit_btn = Button(
+                        text='Edytuj',
+                        size_hint_x=0.5,
+                        background_color=BUTTON_GREEN
+                    )
+                    edit_btn.bind(on_press=lambda x, s=staff: self.edit_academic_staff(s))
+                    buttons_box.add_widget(edit_btn)
+                    
+                    delete_btn = Button(
+                        text='Usuń',
+                        size_hint_x=0.5,
+                        background_color=BUTTON_RED
+                    )
+                    delete_btn.bind(on_press=lambda x, s=staff: self.confirm_delete_academic_staff(s))
+                    buttons_box.add_widget(delete_btn)
+                    
+                    staff_box.add_widget(buttons_box)
+                    
+                    container = BoxLayout(
+                        orientation='vertical',
+                        size_hint_y=None,
+                        height=55
+                    )
+                    container.add_widget(staff_box)
+                    
+                    self.academic_staff_list_container.add_widget(container)
+                    
+            except Exception as e:
+                print(f"Błąd podczas wyszukiwania pracowników: {e}")
 
         DialogUtils.show_search_by_name_dialog(on_search=handle_search)
 

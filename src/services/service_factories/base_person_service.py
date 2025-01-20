@@ -62,4 +62,19 @@ class BasePersonService(Generic[T]):
         Args:
             identifier: Identyfikator osoby do usunięcia
         """
-        self.repository.delete_by_id(identifier) 
+        self.repository.delete_by_id(identifier)
+
+    def get_by_last_name(self, last_name: str) -> List[T]:
+        """
+        Pobiera listę osób o podanym nazwisku.
+        
+        Args:
+            last_name (str): Nazwisko do wyszukania
+            
+        Returns:
+            List[T]: Lista znalezionych osób
+        """
+        try:
+            return self.repository.get_by_last_name(last_name)
+        except Exception as e:
+            raise ValidationError(f"Błąd podczas wyszukiwania po nazwisku: {str(e)}") 

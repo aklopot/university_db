@@ -48,3 +48,14 @@ class SQLiteStudentRepository(BaseStudentRepository):
                 existing_student.gender_id = student.gender_id
                 existing_student.field_of_study_id = student.field_of_study_id
                 session.commit()
+
+    def get_by_last_name(self, last_name: str) -> List[Student]:
+        with Session(self.engine) as session:
+            statement = select(Student).where(
+                Student.last_name.ilike(f"{last_name}%")
+            ).options(
+                joinedload(Student.gender),
+                joinedload(Student.address),
+                joinedload(Student.field_of_study)
+            )
+            return session.exec(statement).all()
