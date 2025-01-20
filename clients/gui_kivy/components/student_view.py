@@ -39,6 +39,52 @@ class StudentView(Screen):
         self.student_list_scroll.add_widget(self.student_list_container)
         self.layout.add_widget(self.student_list_scroll)
 
+        # Przyciski sortowania (nad przyciskami wyszukiwania)
+        sort_layout = BoxLayout(size_hint_y=None, height=50, spacing=10)
+        
+        sort_by_name_button = Button(
+            text='Sortuj po nazwisku',
+            size_hint_y=None,
+            height=50,
+            background_color=BUTTON_HEATHER
+        )
+        sort_by_name_button.bind(on_press=self.sort_by_name)
+        sort_layout.add_widget(sort_by_name_button)
+
+        sort_by_pesel_button = Button(
+            text='Sortuj po PESEL',
+            size_hint_y=None,
+            height=50,
+            background_color=BUTTON_HEATHER
+        )
+        sort_by_pesel_button.bind(on_press=self.sort_by_pesel)
+        sort_layout.add_widget(sort_by_pesel_button)
+        
+        self.layout.add_widget(sort_layout)
+
+        # Przyciski wyszukiwania
+        search_layout = BoxLayout(size_hint_y=None, height=50, spacing=10)
+        
+        search_by_name_button = Button(
+            text='Wyszukaj po nazwisku',
+            size_hint_y=None,
+            height=50,
+            background_color=BUTTON_YELLOW
+        )
+        search_by_name_button.bind(on_press=self.search_by_name)
+        search_layout.add_widget(search_by_name_button)
+
+        search_by_index_button = Button(
+            text='Wyszukaj po PESEL', 
+            size_hint_y=None,
+            height=50,
+            background_color=BUTTON_YELLOW
+        )
+        search_by_index_button.bind(on_press=self.search_by_index)
+        search_layout.add_widget(search_by_index_button)
+        
+        self.layout.add_widget(search_layout)
+
         # Przyciski na dole
         bottom_layout = BoxLayout(size_hint_y=None, height=50, spacing=10)
 
@@ -163,3 +209,28 @@ class StudentView(Screen):
         self.manager.current = 'student_grades_view'
         grades_screen = self.manager.get_screen('student_grades_view')
         grades_screen.load_student_grades(student)
+
+    def search_by_name(self, instance):
+        def handle_search(last_name):
+            students = self.service.get_all_students()
+            filtered_students = [
+                student for student in students 
+                if student.last_name.lower().startswith(last_name.lower())
+            ]
+            self.student_list_container.clear_widgets()
+            # Dodaj odstęp na górze listy
+            self.student_list_container.add_widget(Widget(size_hint_y=None, height=10))
+            for student in filtered_students:
+                # Tutaj dodajemy studentów do listy - istniejący kod wyświetlania
+                self.add_student_to_list(student)
+
+        DialogUtils.show_search_by_name_dialog(on_search=handle_search)
+
+    def search_by_index(self, instance):
+        pass
+
+    def sort_by_name(self, instance):
+        pass
+
+    def sort_by_pesel(self, instance):
+        pass

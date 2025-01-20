@@ -38,6 +38,52 @@ class AcademicStaffView(Screen):
         self.academic_staff_list_scroll.add_widget(self.academic_staff_list_container)
         self.layout.add_widget(self.academic_staff_list_scroll)
         
+        # Przyciski sortowania
+        sort_layout = BoxLayout(size_hint_y=None, height=50, spacing=10)
+        
+        sort_by_name_button = Button(
+            text='Sortuj po nazwisku',
+            size_hint_y=None,
+            height=50,
+            background_color=BUTTON_HEATHER
+        )
+        sort_by_name_button.bind(on_press=self.sort_by_name)
+        sort_layout.add_widget(sort_by_name_button)
+
+        sort_by_pesel_button = Button(
+            text='Sortuj po PESEL',
+            size_hint_y=None,
+            height=50,
+            background_color=BUTTON_HEATHER
+        )
+        sort_by_pesel_button.bind(on_press=self.sort_by_pesel)
+        sort_layout.add_widget(sort_by_pesel_button)
+        
+        self.layout.add_widget(sort_layout)
+
+        # Przyciski wyszukiwania
+        search_layout = BoxLayout(size_hint_y=None, height=50, spacing=10)
+        
+        search_by_name_button = Button(
+            text='Wyszukaj po nazwisku',
+            size_hint_y=None,
+            height=50,
+            background_color=BUTTON_YELLOW
+        )
+        search_by_name_button.bind(on_press=self.search_by_name)
+        search_layout.add_widget(search_by_name_button)
+
+        search_by_pesel_button = Button(
+            text='Wyszukaj po PESEL',
+            size_hint_y=None,
+            height=50,
+            background_color=BUTTON_YELLOW
+        )
+        search_by_pesel_button.bind(on_press=self.search_by_pesel)
+        search_layout.add_widget(search_by_pesel_button)
+        
+        self.layout.add_widget(search_layout)
+
         # Przyciski na dole
         bottom_layout = BoxLayout(size_hint_y=None, height=50, spacing=10)
         
@@ -155,3 +201,28 @@ class AcademicStaffView(Screen):
     
     def return_to_main_menu(self, instance):
         self.manager.current = 'menu'
+
+    def sort_by_name(self, instance):
+        pass
+
+    def sort_by_pesel(self, instance):
+        pass
+
+    def search_by_name(self, instance):
+        def handle_search(last_name):
+            staff_members = self.service.get_all_academic_staff()
+            filtered_staff = [
+                staff for staff in staff_members 
+                if staff.last_name.lower().startswith(last_name.lower())
+            ]
+            self.academic_staff_list_container.clear_widgets()
+            # Dodaj odstęp na górze listy
+            self.academic_staff_list_container.add_widget(Widget(size_hint_y=None, height=10))
+            for staff in filtered_staff:
+                # Tutaj dodajemy pracowników do listy - istniejący kod wyświetlania
+                self.add_staff_to_list(staff)
+
+        DialogUtils.show_search_by_name_dialog(on_search=handle_search)
+
+    def search_by_pesel(self, instance):
+        pass

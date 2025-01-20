@@ -3,6 +3,7 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.app import App
+from kivy.uix.textinput import TextInput
 from clients.gui_kivy.utils.colors import *
 
 class DialogUtils:
@@ -97,4 +98,72 @@ class DialogUtils:
         yes_button.bind(on_press=lambda x: [on_confirm(), popup.dismiss()])
         button_layout.add_widget(yes_button)
 
+        popup.open()
+
+    @staticmethod
+    def show_search_by_name_dialog(on_search):
+        """
+        Wyświetla okno dialogowe do wyszukiwania po nazwisku.
+        
+        Args:
+            on_search: Callback wywoływany po kliknięciu przycisku Szukaj, 
+                      przyjmuje jako argument wprowadzone nazwisko
+        """
+        content = BoxLayout(orientation='vertical', spacing=10, padding=10)
+        
+        # Pole tekstowe na nazwisko z wycentrowanym tekstem
+        name_input = TextInput(
+            multiline=False,
+            size_hint_y=None,
+            height=40,
+            hint_text='Wprowadź nazwisko',
+            halign='center',  # Centrowanie tekstu w poziomie
+            padding=[10, (40-20)/2],
+            font_size='16sp'  # Dodanie odpowiedniej wielkości czcionki
+        )
+        content.add_widget(Label(
+            text='Podaj nazwisko:',
+            font_size='18sp',
+            halign='center',  # Centrowanie tekstu etykiety
+            valign='middle'   # Wycentrowanie w pionie
+        ))
+        content.add_widget(name_input)
+        
+        # Przyciski
+        button_layout = BoxLayout(
+            size_hint_y=None, 
+            height=40, 
+            spacing=10
+        )
+        
+        cancel_button = Button(
+            text='Anuluj',
+            background_color=BUTTON_PEARL
+        )
+        
+        search_button = Button(
+            text='Szukaj',
+            background_color=BUTTON_YELLOW
+        )
+        
+        button_layout.add_widget(cancel_button)
+        button_layout.add_widget(search_button)
+        content.add_widget(button_layout)
+        
+        popup = Popup(
+            title='Wyszukiwanie',
+            content=content,
+            size_hint=(0.4, 0.3),
+            title_size='16sp',
+            title_color=TEXT_WHITE,
+            auto_dismiss=False
+        )
+        
+        def on_search_button(instance):
+            popup.dismiss()
+            on_search(name_input.text.strip())
+            
+        search_button.bind(on_press=on_search_button)
+        cancel_button.bind(on_press=popup.dismiss)
+        
         popup.open() 
