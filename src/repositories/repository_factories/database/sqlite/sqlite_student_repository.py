@@ -70,3 +70,12 @@ class SQLiteStudentRepository(BaseStudentRepository):
                 selectinload(Student.field_of_study)
             )
             return session.exec(statement).all()
+
+    def get_all_students_sorted_by_name(self) -> List[Student]:
+        with Session(self.engine) as session:
+            statement = select(Student).order_by(Student.last_name, Student.first_name).options(
+                joinedload(Student.gender),
+                joinedload(Student.address),
+                joinedload(Student.field_of_study)
+            )
+            return session.exec(statement).all()

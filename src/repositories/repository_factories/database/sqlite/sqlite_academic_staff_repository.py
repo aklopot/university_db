@@ -81,3 +81,11 @@ class SQLiteAcademicStaffRepository(BaseAcademicStaffRepository):
                 selectinload(AcademicStaff.address)
             )
             return session.exec(statement).all()
+
+    def get_all_academic_staff_sorted_by_name(self) -> List[AcademicStaff]:
+        with Session(self.engine) as session:
+            statement = select(AcademicStaff).order_by(AcademicStaff.last_name, AcademicStaff.first_name).options(
+                selectinload(AcademicStaff.gender),
+                selectinload(AcademicStaff.address)
+            )
+            return session.exec(statement).all()
