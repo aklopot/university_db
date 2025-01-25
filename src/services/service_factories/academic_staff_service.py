@@ -53,3 +53,9 @@ class AcademicStaffService(BasePersonService[AcademicStaff]):
         Pobiera listę wszystkich pracowników posortowanych po nazwisku.
         """
         return self.repository.get_all_academic_staff_sorted_by_name()
+
+    def get_all_academic_staff_sorted_by_pesel(self) -> List[AcademicStaff]:
+        """
+        Pobiera listę wszystkich pracowników posortowanych po numerze PESEL.
+        """
+        return self.repository.get_all_academic_staff_sorted_by_pesel()

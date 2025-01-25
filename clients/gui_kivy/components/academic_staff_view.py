@@ -269,7 +269,60 @@ class AcademicStaffView(Screen):
             print(f"Błąd podczas sortowania pracowników: {e}")
 
     def sort_by_pesel(self, instance):
-        pass
+        try:
+            staff_list = self.service.get_all_academic_staff_sorted_by_pesel()
+            self.academic_staff_list_container.clear_widgets()
+            self.academic_staff_list_container.add_widget(Widget(size_hint_y=None, height=10))
+            
+            for staff in staff_list:
+                staff_box = BoxLayout(
+                    orientation='horizontal',
+                    size_hint_y=None,
+                    height=50,
+                    spacing=2
+                )
+                
+                staff_box.add_widget(Label(
+                    text=f"{staff.first_name} {staff.last_name} ({staff.position.value}) PESEL: {staff.pesel}",
+                    size_hint_x=0.6,
+                    font_size=FONT_SIZE_LIST_ITEM,
+                    color=TEXT_WHITE
+                ))
+                
+                buttons_box = BoxLayout(
+                    size_hint_x=0.4,
+                    spacing=2
+                )
+                
+                edit_btn = Button(
+                    text='Edytuj',
+                    size_hint_x=0.5,
+                    background_color=BUTTON_GREEN
+                )
+                edit_btn.bind(on_press=lambda x, s=staff: self.edit_academic_staff(s))
+                buttons_box.add_widget(edit_btn)
+                
+                delete_btn = Button(
+                    text='Usuń',
+                    size_hint_x=0.5,
+                    background_color=BUTTON_RED
+                )
+                delete_btn.bind(on_press=lambda x, s=staff: self.confirm_delete_academic_staff(s))
+                buttons_box.add_widget(delete_btn)
+                
+                staff_box.add_widget(buttons_box)
+                
+                container = BoxLayout(
+                    orientation='vertical',
+                    size_hint_y=None,
+                    height=55
+                )
+                container.add_widget(staff_box)
+                
+                self.academic_staff_list_container.add_widget(container)
+                
+        except Exception as e:
+            print(f"Błąd podczas sortowania pracowników po PESEL: {e}")
 
     def search_by_name(self, instance):
         def handle_search(last_name):

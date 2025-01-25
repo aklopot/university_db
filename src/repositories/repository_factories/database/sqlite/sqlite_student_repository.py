@@ -79,3 +79,12 @@ class SQLiteStudentRepository(BaseStudentRepository):
                 joinedload(Student.field_of_study)
             )
             return session.exec(statement).all()
+
+    def get_all_students_sorted_by_pesel(self) -> List[Student]:
+        with Session(self.engine) as session:
+            statement = select(Student).order_by(Student.pesel).options(
+                joinedload(Student.gender),
+                joinedload(Student.address),
+                joinedload(Student.field_of_study)
+            )
+            return session.exec(statement).all()

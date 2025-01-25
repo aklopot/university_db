@@ -48,3 +48,9 @@ class StudentService(BasePersonService[Student]):
         Pobiera listę wszystkich studentów posortowanych po nazwisku.
         """
         return self.repository.get_all_students_sorted_by_name()
+
+    def get_all_students_sorted_by_pesel(self) -> List[Student]:
+        """
+        Pobiera listę wszystkich studentów posortowanych po numerze PESEL.
+        """
+        return self.repository.get_all_students_sorted_by_pesel()
