@@ -158,6 +158,65 @@ Szczegółowa dokumentacja projektu znajduje się w katalogu `documentation/`:
 - [Architektura systemu](documentation/architecture.md) - pełny opis architektury, wzorców projektowych i przepływu danych
 - [Schema bazy danych](documentation/database_schema.png) - diagram przedstawiający strukturę bazy danych
 
+## 🧪 Testy
+
+### Konfiguracja środowiska testowego
+
+1. Zainstaluj zależności deweloperskie:
+```bash
+pip install -r requirements-dev.txt
+```
+
+### Uruchamianie testów
+
+1. Uruchom wszystkie testy:
+```bash
+pytest
+```
+
+2. Uruchom testy z wyświetlaniem szczegółów:
+```bash
+pytest -v
+```
+
+3. Uruchom testy z konkretnego modułu:
+```bash
+pytest tests/repositories/test_json_gender_repository.py
+```
+
+### Pokrycie kodu testami
+
+1. Wygeneruj raport pokrycia:
+```bash
+coverage run -m pytest
+coverage report
+```
+
+2. Wygeneruj szczegółowy raport HTML:
+```bash
+coverage html
+```
+Raport będzie dostępny w katalogu `htmlcov/index.html`
+
+### Struktura testów
+
+```
+tests/
+├── repositories/           # Testy repozytoriów
+│   ├── test_json_gender_repository.py
+│   └── test_json_student_repository.py
+├── services/              # Testy serwisów
+│   ├── test_student_grade_service.py
+│   └── test_student_service.py
+└── conftest.py           # Współdzielone fixtures
+```
+
+### Konwencje testowe
+- Testy jednostkowe używają pytest
+- Każdy test powinien zawierać sekcje: Arrange, Act, Assert
+- Mockowanie zewnętrznych zależności przy użyciu pytest-mock
+- Fixtures współdzielone w conftest.py
+
 ## 🤝 Współpraca
 
 Zachęcamy do współpracy przy rozwoju projektu. Aby zgłosić błąd lub zaproponować nową funkcjonalność, utwórz Issue lub Pull Request.
