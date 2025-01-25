@@ -1,3 +1,4 @@
+from typing import Dict
 from src.repositories.repository_factories.repository_factory_interface import RepositoryFactoryInterface
 from src.repositories.repository_factories.database.sqlite.sqlite_student_repository import SQLiteStudentRepository
 from src.repositories.repository_factories.database.sqlite.sqlite_academic_staff_repository import SQLiteAcademicStaffRepository
@@ -15,14 +16,16 @@ from src.repositories.base_repositories.base_academic_course_repository import B
 from src.repositories.base_repositories.base_student_grade_repository import BaseStudentGradeRepository
 
 class SQLiteRepositoryFactory(RepositoryFactoryInterface):
-    def __init__(self, config: dict):
+    def __init__(self, config: Dict):
         self.config = config
+        if 'sqlite_url' not in self.config:
+            self.config['sqlite_url'] = "sqlite:///data/sqlite/university.db"  # domyślna ścieżka
         
     def create_student_repository(self) -> BaseStudentRepository:
-        return SQLiteStudentRepository(self.config["sqlite_url"])
+        return SQLiteStudentRepository(self.config['sqlite_url'])
         
     def create_academic_staff_repository(self) -> BaseAcademicStaffRepository:
-        return SQLiteAcademicStaffRepository(self.config["sqlite_url"])
+        return SQLiteAcademicStaffRepository(self.config['sqlite_url'])
         
     def create_gender_repository(self) -> BaseGenderRepository:
         return SQLiteGenderRepository(self.config["sqlite_url"])

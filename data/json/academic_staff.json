@@ -1,30 +1,23 @@
-[
-    {
-      "first_name": "Marek",
-      "last_name": "Zieliński",
-      "address": {
-        "street": "ul. Akademicka 1",
-        "city": "Gdańsk",
-        "zip_code": "80-001",
-        "country": "Polska"
-      },
-      "pesel": "73030378901",
-      "gender": "MALE",
-      "position": "PROFESSOR"
-    },
-    {
-      "first_name": "Katarzyna",
-      "last_name": "Wiśniewska",
-      "address": {
-        "street": "ul. Naukowa 5",
-        "apartment": "12B",
-        "city": "Poznań",
-        "zip_code": "60-001",
-        "country": "Polska"
-      },
-      "pesel": "80050543210",
-      "gender": "FEMALE",
-      "position": "ASSISTANT"
-    }
-  ]
+{
+    "academic_staff": [
+        {
+            "academic_staff_id": 1,
+            "first_name": "Jan",
+            "last_name": "Kowalski",
+            "title": "dr",
+            "email": "jan.kowalski@university.edu",
+            "gender_id": 1,
+            "address_id": 1
+        },
+        {
+            "academic_staff_id": 2,
+            "first_name": "Anna",
+            "last_name": "Nowak",
+            "title": "prof.",
+            "email": "anna.nowak@university.edu",
+            "gender_id": 2,
+            "address_id": 2
+        }
+    ]
+}
   

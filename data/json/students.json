@@ -1,30 +1,24 @@
-[
-    {
-      "first_name": "Jan",
-      "last_name": "Kowalski",
-      "address": {
-        "street": "ul. Długa 10",
-        "apartment": "5A",
-        "city": "Warszawa",
-        "zip_code": "00-001",
-        "country": "Polska"
-      },
-      "index_number": "12345",
-      "pesel": "85010112345",
-      "gender": "MALE"
+{
+    "students": [
+        {
+            "student_id": 1,
+        "index_number": "12345",
+        "first_name": "Jan",
+        "last_name": "Kowalski",
+        "pesel": "99121234567",
+        "gender_id": 1,
+        "field_of_study_id": 1,
+        "address_id": 1
     },
     {
-      "first_name": "Anna",
-      "last_name": "Nowak",
-      "address": {
-        "street": "ul. Krótka 2",
-        "city": "Kraków",
-        "zip_code": "30-002",
-        "country": "Polska"
-      },
-      "index_number": "67890",
-      "pesel": "92020254321",
-      "gender": "FEMALE"
-    }
-  ]
-  
+        "student_id": 2,
+        "first_name": "Anna",
+        "last_name": "Nowak",
+        "address_id": 2,
+        "index_number": "67890",
+        "pesel": "92020254321",
+          "gender_id": 2,
+            "field_of_study_id": 2
+        }
+    ]
+}

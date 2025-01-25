@@ -2,10 +2,17 @@
     "courses": [
         {
             "academic_course_id": 1,
-            "academic_course_name": "Matematyka",
-            "ects_credits": 6,
-            "field_of_study_id": 1,
-            "academic_staff_id": null
+            "academic_course_name": "Matematyka filozoficzna",
+            "ects_credits": 2,
+            "field_of_study_id": 3,
+            "academic_staff_id": 1
+        },
+        {
+            "academic_course_id": 2,
+            "academic_course_name": "Matematyka dyskretna",
+            "ects_credits": 4,
+            "field_of_study_id": 2,
+            "academic_staff_id": 2
         }
     ]
 }

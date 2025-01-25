@@ -3,10 +3,17 @@ from sqlmodel import SQLModel, Session, select, create_engine
 from src.models.universitydb import Student
 from src.repositories.base_repositories.base_student_repository import BaseStudentRepository
 from sqlalchemy.orm import joinedload, selectinload
+import os
+from pathlib import Path
 
 
 class SQLiteStudentRepository(BaseStudentRepository):
     def __init__(self, db_url: str):
+        # Upewnij się, że katalog dla bazy danych istnieje
+        if db_url.startswith('sqlite:///'):
+            db_path = db_url[10:]  # usuń 'sqlite:///'
+            os.makedirs(os.path.dirname(db_path), exist_ok=True)
+            
         self.engine = create_engine(db_url)
         self.create_all_tables()
 

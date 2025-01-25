@@ -11,7 +11,14 @@ class JSONFieldOfStudyRepository(BaseFieldOfStudyRepository):
         try:
             with open(self.file_path, 'r', encoding='utf-8') as file:
                 data = json.load(file)
-                return [FieldOfStudy(**item) for item in data.get('fields_of_study', [])]
+                fields_data = data.get('fields_of_study', [])
+                return [
+                    FieldOfStudy(
+                        field_of_study_id=item.get('field_of_study_id'),
+                        field_name=item.get('field_name')
+                    )
+                    for item in fields_data
+                ]
         except FileNotFoundError:
             # Jeśli plik nie istnieje, tworzymy go z pustą listą
             self._save_data([])

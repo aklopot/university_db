@@ -50,20 +50,39 @@ class JSONAcademicStaffRepository(BaseAcademicStaffRepository):
         try:
             with open(self.file_path, 'r', encoding='utf-8') as file:
                 data = json.load(file)
-                return [self._create_staff_object(item) for item in data]
+                staff_data = data.get('academic_staff', [])
+                return [
+                    AcademicStaff(
+                        academic_staff_id=item.get('academic_staff_id'),
+                        first_name=item.get('first_name'),
+                        last_name=item.get('last_name'),
+                        title=item.get('title'),
+                        email=item.get('email'),
+                        gender_id=item.get('gender_id'),
+                        address_id=item.get('address_id')
+                    )
+                    for item in staff_data
+                ]
         except FileNotFoundError:
+            self._save_data([])
             return []
 
-    def _save_data(self, academic_staff_list: List[AcademicStaff]) -> None:
+    def _save_data(self, staff: List[AcademicStaff]) -> None:
         with open(self.file_path, 'w', encoding='utf-8') as file:
-            json_data = []
-            for staff in academic_staff_list:
-                staff_dict = staff.model_dump(exclude={'gender', 'address'})
-                if staff.gender:
-                    staff_dict['gender_id'] = staff.gender.gender_id
-                if staff.address:
-                    staff_dict['address_id'] = staff.address.address_id
-                json_data.append(staff_dict)
+            json_data = {
+                'academic_staff': [
+                    {
+                        'academic_staff_id': s.academic_staff_id,
+                        'first_name': s.first_name,
+                        'last_name': s.last_name,
+                        'title': s.title,
+                        'email': s.email,
+                        'gender_id': s.gender_id,
+                        'address_id': s.address_id
+                    }
+                    for s in staff
+                ]
+            }
             json.dump(json_data, file, indent=4, ensure_ascii=False)
 
     def add_academic_staff(self, academic_staff: AcademicStaff) -> None:

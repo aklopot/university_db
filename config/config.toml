@@ -1,5 +1,6 @@
-[general]
-data_source = "json" # Opcje: json, sqlite, postgres
+[data_source]
+# Możliwe wartości: "json" lub "sqlite"
+type = "sqlite"
 
 [data_source.json]
 json_student_path = "data/json/students.json"

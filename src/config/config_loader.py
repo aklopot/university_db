@@ -22,17 +22,28 @@ class ConfigLoader:
             with open(config_path, "rb") as f:
                 config = tomllib.load(f)
 
-            # Sprawdź czy wszystkie wymagane ścieżki są obecne
-            json_config = config["data_source"]["json"]
-            for path in ConfigLoader.REQUIRED_JSON_PATHS:
-                if path not in json_config:
-                    raise ValueError(f"Brak wymaganej ścieżki '{path}' w konfiguracji JSON")
-                
-            return {
-                "data_source": config["general"]["data_source"],
-                "data_source.json": json_config,
-                "database": config.get("database", {})
+            data_source_type = config["data_source"]["type"]
+            result = {
+                "data_source": data_source_type
             }
+
+            # Dodaj odpowiednią konfigurację w zależności od typu źródła danych
+            if data_source_type == "json":
+                json_config = config["data_source"]["json"]
+                # Sprawdź wymagane ścieżki tylko dla konfiguracji JSON
+                for path in ConfigLoader.REQUIRED_JSON_PATHS:
+                    if path not in json_config:
+                        raise ValueError(f"Brak wymaganej ścieżki '{path}' w konfiguracji JSON")
+                result["data_source.json"] = json_config
+                
+            elif data_source_type == "sqlite":
+                result["sqlite_url"] = config["data_source"]["sqlite"]["sqlite_url"]
+                
+            elif data_source_type == "postgres":
+                result["postgres_url"] = config["data_source"]["postgres"]["postgres_url"]
+
+            return result
+            
         except Exception as e:
             raise RuntimeError(f"Błąd podczas ładowania konfiguracji: {str(e)}")
 

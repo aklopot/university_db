@@ -87,7 +87,17 @@ class JSONAcademicCourseRepository(BaseAcademicCourseRepository):
         courses = self._load_data()
         for i, c in enumerate(courses):
             if c.academic_course_id == course.academic_course_id:
-                courses[i] = course
+                # Aktualizujemy wszystkie pola kursu
+                courses[i].academic_course_name = course.academic_course_name
+                courses[i].ects_credits = course.ects_credits
+                courses[i].field_of_study_id = course.field_of_study_id
+                courses[i].academic_staff_id = course.academic_staff_id
+
+                # Aktualizujemy obiekty powiązań
+                if course.field_of_study:
+                    courses[i].field_of_study = self._field_of_study_repository.get_field_of_study_by_id(course.field_of_study_id)
+                if course.academic_staff:
+                    courses[i].academic_staff = self._academic_staff_repository.get_academic_staff_by_id(course.academic_staff_id)
                 break
         self._save_data(courses)
 

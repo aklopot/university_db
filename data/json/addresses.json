@@ -1,3 +1,28 @@
 {
-    "addresses": []
+    "addresses": [
+        {
+            "address_id": 1,
+            "street": "ul. Przykładowa 1",
+            "city": "Kraków",
+            "zip_code": "30-001",
+            "country": "Polska",
+            "apartment": "1"
+        },
+        {
+            "address_id": 2,
+            "street": "ul. Testowa 2",
+            "city": "Warszawa",
+            "zip_code": "00-002",
+            "country": "Polska",
+            "apartment": "2"
+        },
+        {
+            "address_id": 3,
+            "street": "ul. Wrocławska 78",
+            "city": "Wrocław",
+            "zip_code": "50-004",
+            "country": "Polska",
+            "apartment": null
+        }
+    ]
 } 
