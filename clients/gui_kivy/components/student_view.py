@@ -85,6 +85,16 @@ class StudentView(Screen):
         
         self.layout.add_widget(search_layout)
 
+        # Nowy przycisk "Pokaż wszystkich studentów"
+        show_all_button = Button(
+            text='Pokaż wszystkich studentów',
+            size_hint_y=None,
+            height=50,
+            background_color=BUTTON_YELLOW
+        )
+        show_all_button.bind(on_press=self.refresh_student_list)
+        self.layout.add_widget(show_all_button)
+
         # Przyciski na dole
         bottom_layout = BoxLayout(size_hint_y=None, height=50, spacing=10)
 
@@ -114,7 +124,7 @@ class StudentView(Screen):
         # Odśwież listę studentów za każdym razem, gdy wchodzimy na ekran
         self.refresh_student_list()
 
-    def refresh_student_list(self):
+    def refresh_student_list(self, *args):
         students = self.service.get_all_students()
         self.student_list_container.clear_widgets()
         

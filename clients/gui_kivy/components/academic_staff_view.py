@@ -84,6 +84,16 @@ class AcademicStaffView(Screen):
         
         self.layout.add_widget(search_layout)
 
+        # Nowy przycisk "Pokaż wszystkich pracowników"
+        show_all_button = Button(
+            text='Pokaż wszystkich pracowników',
+            size_hint_y=None,
+            height=50,
+            background_color=BUTTON_YELLOW
+        )
+        show_all_button.bind(on_press=self.refresh_academic_staff_list)
+        self.layout.add_widget(show_all_button)
+
         # Przyciski na dole
         bottom_layout = BoxLayout(size_hint_y=None, height=50, spacing=10)
         
@@ -110,7 +120,7 @@ class AcademicStaffView(Screen):
         
         self.bind(on_pre_enter=lambda instance: self.refresh_academic_staff_list())
     
-    def refresh_academic_staff_list(self):
+    def refresh_academic_staff_list(self, *args):
         try:
             academic_staff_list = self.service.get_all_academic_staff()
             self.academic_staff_list_container.clear_widgets()
