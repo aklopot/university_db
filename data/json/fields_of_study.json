@@ -1,0 +1,16 @@
+{
+    "fields_of_study": [
+        {
+            "field_of_study_id": 1,
+            "field_name": "Informatyka"
+        },
+        {
+            "field_of_study_id": 2,
+            "field_name": "Zarządzanie"
+        },
+        {
+            "field_of_study_id": 3,
+            "field_name": "Fizyka"
+        }
+    ]
+}

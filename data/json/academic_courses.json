@@ -1,0 +1,11 @@
+{
+    "courses": [
+        {
+            "academic_course_id": 1,
+            "academic_course_name": "Matematyka",
+            "ects_credits": 6,
+            "field_of_study_id": 1,
+            "academic_staff_id": null
+        }
+    ]
+}

@@ -10,6 +10,7 @@ from src.repositories.base_repositories.base_field_of_study_repository import Ba
 from src.repositories.base_repositories.base_academic_course_repository import BaseAcademicCourseRepository
 from src.repositories.base_repositories.base_student_grade_repository import BaseStudentGradeRepository
 from src.config.config_loader import load_config
+from src.repositories.repository_factories.database.json.json_academic_course_repository import JSONAcademicCourseRepository
 
 class RepositoryFactory:
     def __init__(self):
@@ -36,6 +37,12 @@ class RepositoryFactory:
         return self.factory.create_field_of_study_repository()
         
     def get_academic_course_repository(self) -> BaseAcademicCourseRepository:
+        if self.config["data_source"] == "json":
+            return JSONAcademicCourseRepository(
+                self.config["data_source.json"]["json_academic_course_path"],
+                self.get_field_of_study_repository(),
+                self.get_academic_staff_repository()
+            )
         return self.factory.create_academic_course_repository()
 
     def get_student_grade_repository(self) -> BaseStudentGradeRepository:

@@ -1,12 +1,17 @@
-    [general]
-    data_source = "sqlite" # Opcje: json, sqlite, postgres
+[general]
+data_source = "json" # Opcje: json, sqlite, postgres
 
-    [data_source.json]
-    json_student_path = "data/json/students.json"
-    json_academic_staff_path = "data/json/academic_staff.json"
+[data_source.json]
+json_student_path = "data/json/students.json"
+json_academic_staff_path = "data/json/academic_staff.json"
+json_field_of_study_path = "data/json/fields_of_study.json"
+json_gender_path = "data/json/genders.json"
+json_address_path = "data/json/addresses.json"
+json_academic_course_path = "data/json/academic_courses.json"
+json_student_grade_path = "data/json/student_grades.json"
 
-    [data_source.sqlite]
-    sqlite_url = "sqlite:///data/sqlite/university_db.db"
+[data_source.sqlite]
+sqlite_url = "sqlite:///data/sqlite/university_db.db"
 
-    [data_source.postgres]
-    postgres_url = "postgresql://user:password@localhost:5432/university_db"
+[data_source.postgres]
+postgres_url = "postgresql://user:password@localhost:5432/university_db"
