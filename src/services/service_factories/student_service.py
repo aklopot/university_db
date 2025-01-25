@@ -36,3 +36,9 @@ class StudentService(BasePersonService[Student]):
         Usuwa studenta o podanym numerze indeksu.
         """
         self.delete_by_id(index_number)
+
+    def get_by_pesel(self, pesel: str) -> List[Student]:
+        """
+        Pobiera studentów po numerze PESEL.
+        """
+        return self.repository.get_by_pesel(pesel)

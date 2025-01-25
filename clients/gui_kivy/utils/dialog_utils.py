@@ -166,4 +166,72 @@ class DialogUtils:
         search_button.bind(on_press=on_search_button)
         cancel_button.bind(on_press=popup.dismiss)
         
+        popup.open()
+
+    @staticmethod
+    def show_search_by_pesel_dialog(on_search):
+        """
+        Wyświetla okno dialogowe do wyszukiwania po numerze PESEL.
+        
+        Args:
+            on_search: Callback wywoływany po kliknięciu przycisku Szukaj, 
+                      przyjmuje jako argument wprowadzony PESEL
+        """
+        content = BoxLayout(orientation='vertical', spacing=10, padding=10)
+        
+        # Pole tekstowe na PESEL z wycentrowanym tekstem
+        pesel_input = TextInput(
+            multiline=False,
+            size_hint_y=None,
+            height=40,
+            hint_text='Wprowadź numer PESEL',
+            halign='center',  # Centrowanie tekstu w poziomie
+            padding=[10, (40-20)/2],
+            font_size='16sp'
+        )
+        content.add_widget(Label(
+            text='Podaj numer PESEL:',
+            font_size='18sp',
+            halign='center',
+            valign='middle'
+        ))
+        content.add_widget(pesel_input)
+        
+        # Przyciski
+        button_layout = BoxLayout(
+            size_hint_y=None, 
+            height=40, 
+            spacing=10
+        )
+        
+        cancel_button = Button(
+            text='Anuluj',
+            background_color=BUTTON_PEARL
+        )
+        
+        search_button = Button(
+            text='Szukaj',
+            background_color=BUTTON_YELLOW
+        )
+        
+        button_layout.add_widget(cancel_button)
+        button_layout.add_widget(search_button)
+        content.add_widget(button_layout)
+        
+        popup = Popup(
+            title='Wyszukiwanie',
+            content=content,
+            size_hint=(0.4, 0.3),
+            title_size='16sp',
+            title_color=TEXT_WHITE,
+            auto_dismiss=False
+        )
+        
+        def on_search_button(instance):
+            popup.dismiss()
+            on_search(pesel_input.text.strip())
+            
+        search_button.bind(on_press=on_search_button)
+        cancel_button.bind(on_press=popup.dismiss)
+        
         popup.open() 

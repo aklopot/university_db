@@ -41,3 +41,9 @@ class AcademicStaffService(BasePersonService[AcademicStaff]):
         except Exception as e:
             print(f"Błąd w serwisie podczas usuwania pracownika: {e}")
             raise
+
+    def get_by_pesel(self, pesel: str) -> List[AcademicStaff]:
+        """
+        Pobiera pracowników po numerze PESEL.
+        """
+        return self.repository.get_by_pesel(pesel)

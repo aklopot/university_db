@@ -71,3 +71,13 @@ class SQLiteAcademicStaffRepository(BaseAcademicStaffRepository):
                 selectinload(AcademicStaff.address)
             )
             return session.exec(statement).all()
+
+    def get_by_pesel(self, pesel: str) -> List[AcademicStaff]:
+        with Session(self.engine) as session:
+            statement = select(AcademicStaff).where(
+                AcademicStaff.pesel.ilike(f"{pesel}%")
+            ).options(
+                selectinload(AcademicStaff.gender),
+                selectinload(AcademicStaff.address)
+            )
+            return session.exec(statement).all()

@@ -74,14 +74,14 @@ class StudentView(Screen):
         search_by_name_button.bind(on_press=self.search_by_name)
         search_layout.add_widget(search_by_name_button)
 
-        search_by_index_button = Button(
+        search_by_pesel_button = Button(
             text='Wyszukaj po PESEL', 
             size_hint_y=None,
             height=50,
             background_color=BUTTON_YELLOW
         )
-        search_by_index_button.bind(on_press=self.search_by_index)
-        search_layout.add_widget(search_by_index_button)
+        search_by_pesel_button.bind(on_press=self.search_by_pesel)
+        search_layout.add_widget(search_by_pesel_button)
         
         self.layout.add_widget(search_layout)
 
@@ -131,7 +131,7 @@ class StudentView(Screen):
             
             # Dodajemy kierunek studiów i numer indeksu do wyświetlanych informacji
             student_box.add_widget(Label(
-                text=f"{student.first_name} {student.last_name} - {student.index_number} ({student.field_of_study.field_name if student.field_of_study else 'Brak kierunku'})",
+                text=f"{student.first_name} {student.last_name} - {student.index_number} ({student.field_of_study.field_name if student.field_of_study else 'Brak kierunku'}) PESEL: {student.pesel}",
                 size_hint_x=0.6,
                 font_size=FONT_SIZE_LIST_ITEM,
                 color=TEXT_WHITE
@@ -226,7 +226,7 @@ class StudentView(Screen):
                     )
                     
                     student_box.add_widget(Label(
-                        text=f"{student.first_name} {student.last_name} - {student.index_number} ({student.field_of_study.field_name if student.field_of_study else 'Brak kierunku'})",
+                        text=f"{student.first_name} {student.last_name} - {student.index_number} ({student.field_of_study.field_name if student.field_of_study else 'Brak kierunku'}) PESEL: {student.pesel}",
                         size_hint_x=0.6,
                         font_size=FONT_SIZE_LIST_ITEM,
                         color=TEXT_WHITE
@@ -288,3 +288,73 @@ class StudentView(Screen):
 
     def sort_by_pesel(self, instance):
         pass
+
+    def search_by_pesel(self, instance):
+        def handle_search(pesel):
+            try:
+                filtered_students = self.service.get_by_pesel(pesel)
+                self.student_list_container.clear_widgets()
+                self.student_list_container.add_widget(Widget(size_hint_y=None, height=10))
+                
+                for student in filtered_students:
+                    student_box = BoxLayout(
+                        orientation='horizontal',
+                        size_hint_y=None,
+                        height=50,
+                        spacing=2
+                    )
+                    
+                    student_box.add_widget(Label(
+                        text=f"{student.first_name} {student.last_name} - {student.index_number} ({student.field_of_study.field_name if student.field_of_study else 'Brak kierunku'}) PESEL: {student.pesel}",
+                        size_hint_x=0.6,
+                        font_size=FONT_SIZE_LIST_ITEM,
+                        color=TEXT_WHITE
+                    ))
+                    
+                    buttons_box = BoxLayout(
+                        size_hint_x=0.4,
+                        spacing=6
+                    )
+                    
+                    edit_delete_box = BoxLayout(
+                        size_hint_x=0.66,
+                        spacing=2
+                    )
+                    
+                    edit_btn = Button(
+                        text='Edytuj',
+                        size_hint_x=0.5,
+                        background_color=BUTTON_GREEN
+                    )
+                    edit_btn.bind(on_press=lambda instance, student=student: self.edit_student(student))
+                    edit_delete_box.add_widget(edit_btn)
+
+                    delete_btn = Button(
+                        text='Usuń',
+                        size_hint_x=0.5,
+                        background_color=BUTTON_RED
+                    )
+                    delete_btn.bind(on_press=lambda instance, student=student: self.delete_student(student))
+                    edit_delete_box.add_widget(delete_btn)
+                    
+                    buttons_box.add_widget(edit_delete_box)
+
+                    grades_btn = Button(
+                        text='Oceny',
+                        size_hint_x=0.33,
+                        background_color=BUTTON_BEIGE
+                    )
+                    grades_btn.bind(on_press=lambda instance, student=student: self.show_student_grades(student))
+                    buttons_box.add_widget(grades_btn)
+                    
+                    student_box.add_widget(buttons_box)
+                    
+                    container = BoxLayout(orientation='vertical', size_hint_y=None, height=55)
+                    container.add_widget(student_box)
+                    
+                    self.student_list_container.add_widget(container)
+                    
+            except Exception as e:
+                print(f"Błąd podczas wyszukiwania studentów: {e}")
+
+        DialogUtils.show_search_by_pesel_dialog(on_search=handle_search)

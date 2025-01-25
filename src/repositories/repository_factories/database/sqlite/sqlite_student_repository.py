@@ -2,7 +2,7 @@ from typing import List
 from sqlmodel import SQLModel, Session, select, create_engine
 from src.models.universitydb import Student
 from src.repositories.base_repositories.base_student_repository import BaseStudentRepository
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, selectinload
 
 
 class SQLiteStudentRepository(BaseStudentRepository):
@@ -57,5 +57,16 @@ class SQLiteStudentRepository(BaseStudentRepository):
                 joinedload(Student.gender),
                 joinedload(Student.address),
                 joinedload(Student.field_of_study)
+            )
+            return session.exec(statement).all()
+
+    def get_by_pesel(self, pesel: str) -> List[Student]:
+        with Session(self.engine) as session:
+            statement = select(Student).where(
+                Student.pesel.ilike(f"{pesel}%")
+            ).options(
+                selectinload(Student.gender),
+                selectinload(Student.address),
+                selectinload(Student.field_of_study)
             )
             return session.exec(statement).all()

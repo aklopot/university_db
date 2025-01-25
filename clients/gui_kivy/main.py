@@ -20,8 +20,7 @@ from clients.gui_kivy.components.student_grade_form import StudentGradeForm
 
 class UniversityDBApp(App):
     def build(self):
-        # Zwiększamy wysokość okna o 40px (z domyślnej wartości)
-        Window.size = (800, 750)  # Było (800, 600), teraz zwiększamy do 640
+        Window.size = (950, 750)
         
         # Ustawienie tytułu okna
         self.title = 'Akademicka baza danych'
