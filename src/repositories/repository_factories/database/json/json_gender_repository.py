@@ -20,10 +20,10 @@ class JSONGenderRepository(BaseGenderRepository):
             return self._load_data()
 
     def _save_data(self, genders: List[Gender]) -> None:
-        with open(self.file_path, 'w') as file:
+        with open(self.file_path, 'w', encoding='utf-8') as file:
             json.dump({
-                'genders': [gender.dict() for gender in genders]
-            }, file, indent=4)
+                'genders': [gender.model_dump() for gender in genders]
+            }, file, indent=4, ensure_ascii=False)
 
     def add_gender(self, gender: Gender) -> None:
         genders = self._load_data()
@@ -47,7 +47,7 @@ class JSONGenderRepository(BaseGenderRepository):
     def get_gender_by_name(self, name: str) -> Optional[Gender]:
         genders = self._load_data()
         for gender in genders:
-            if gender.name == name:
+            if gender.gender_name == name:
                 return gender
         return None
 

@@ -1,3 +1,4 @@
 # GUI
 kivy                # Do aplikacji okienkowej opartej na Kivy
 sqlmodel            # Do obsługi bazy danych
+pydantic>=2.5.0
