@@ -14,7 +14,6 @@ from src.config.config_loader import load_config
 class RepositoryFactory:
     def __init__(self):
         self.config = load_config()
-        print(f"DEBUG: Received config: {self.config}")
         self.factory = self._create_factory()
         
     def _create_factory(self) -> RepositoryFactoryInterface:
