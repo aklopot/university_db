@@ -57,13 +57,13 @@ pip install -r requirements.txt
 
 Dostępne są trzy interfejsy użytkownika:
 
-1. Aplikacja GUI (Kivy):
+1. Aplikacja GUI (Kivy) [Linux/Git Bash]:
 ```bash
 ./run_universitydb_gui.sh
 ```
 lub
 ```bash
-python clients/gui_kivy/main.py
+python -m clients.gui_kivy.main
 ```
 
 2. Interfejs wiersza poleceń (CLI) - *w trakcie implementacji*:
